@@ -67,7 +67,7 @@ export default async function AdminPage() {
                   </TableCell>
                   <TableCell className="text-right flex justify-end gap-2">
                       <EditStaffForm user={user} />
-                      <DeleteUserDialog userId={user.id} />
+                      {user.role !== 'admin' && <DeleteUserDialog userId={user.id} />}
                   </TableCell>
                 </TableRow>
               ))}
