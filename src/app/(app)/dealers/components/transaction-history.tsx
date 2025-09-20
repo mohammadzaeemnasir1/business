@@ -95,7 +95,7 @@ export function TransactionHistory({ data }: { data: Transaction[] }) {
         <div className="text-right">
             <Button
             variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted()- === "asc")}
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             >
             Total Amount
             <ArrowUpDown className="ml-2 h-4 w-4" />
