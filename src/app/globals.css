@@ -88,21 +88,38 @@ body {
 @media print {
   body {
     background: #fff;
+    padding: 0;
+    margin: 0;
   }
   .no-print {
-    display: none;
+    display: none !important;
   }
   .print-container {
     padding: 0 !important;
+    margin: 0 !important;
   }
   .bill-card {
     border: none;
     box-shadow: none;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
   .shop-name {
       color: black !important;
   }
   .thank-you {
       color: black !important;
+  }
+  main {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  body > div:not(.print-container),
+  body > header,
+  body > footer,
+  body > aside {
+      display: none;
   }
 }

@@ -32,7 +32,7 @@ export default function SaleDetailPage({ params }: { params: { id: string } }) {
   })
 
   return (
-    <div className="space-y-8 print-container">
+    <div className="space-y-8">
       <div className="flex items-center justify-between no-print">
          <Button asChild variant="outline" size="sm">
             <Link href="/customers">
@@ -47,7 +47,9 @@ export default function SaleDetailPage({ params }: { params: { id: string } }) {
         />
       </div>
       
-      <BillDetails sale={sale} customer={customer} items={detailedItems} />
+      <div className="print-container">
+        <BillDetails sale={sale} customer={customer} items={detailedItems} />
+      </div>
 
     </div>
   );

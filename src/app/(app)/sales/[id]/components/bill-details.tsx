@@ -37,24 +37,24 @@ export function BillDetails({ sale, customer, items }: BillDetailsProps) {
   const [year, month, day] = sale.date.split('-').map(Number);
   const saleDate = new Date(Date.UTC(year, month - 1, day));
   
-  const saleUrl = typeof window !== 'undefined' ? `${window.location.origin}/sales/${sale.id}`: '';
+  const saleUrl = typeof window !== 'undefined' ? window.location.href: '';
 
   return (
     <Card className="bill-card">
       <CardHeader className="bg-muted/50 print:bg-transparent">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-             <div className="space-y-1">
-                <h1 className="font-headline text-2xl font-bold text-primary shop-name">Fancy Pearls</h1>
+        <div className="flex justify-between items-start">
+            <div className="flex-1 space-y-1">
+                <h1 className="font-headline text-2xl font-bold text-primary shop-name text-center">Fancy Pearls</h1>
             </div>
-             <div className="flex items-center gap-4">
-                {saleUrl && <QRCodeSVG value={saleUrl} size={80} />}
-                <div className="flex items-center gap-2 no-print">
-                    <Button onClick={handlePrint} variant="outline">
-                        <Printer className="mr-2"/>
-                        Print Bill
-                    </Button>
-                </div>
+            <div className="flex items-center gap-2 no-print">
+                <Button onClick={handlePrint} variant="outline">
+                    <Printer className="mr-2"/>
+                    Print Bill
+                </Button>
             </div>
+        </div>
+        <div className="flex justify-center my-4">
+            {saleUrl && <QRCodeSVG value={saleUrl} size={80} />}
         </div>
         <div className="border-t pt-4 mt-4 flex justify-between text-sm">
             <div>
