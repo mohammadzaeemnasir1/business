@@ -87,9 +87,7 @@ body {
 
 @media print {
   body {
-    background: #fff;
-    padding: 0;
-    margin: 0;
+    background: #fff !important;
   }
   .no-print {
     display: none !important;
@@ -101,10 +99,6 @@ body {
   .bill-card {
     border: none;
     box-shadow: none;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
   }
   .shop-name {
       color: black !important;
@@ -116,10 +110,19 @@ body {
     padding: 0 !important;
     margin: 0 !important;
   }
-  body > div:not(.print-container),
-  body > header,
-  body > footer,
-  body > aside {
-      display: none;
+  /* Hide all elements by default */
+  body > *, body > div > div > div:not(.print-container) {
+    display: none;
+  }
+  /* Show only the print-container and its contents */
+  .print-container, .print-container * {
+    display: block !important;
+    visibility: visible !important;
+  }
+  .print-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
   }
 }
