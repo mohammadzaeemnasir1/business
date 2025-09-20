@@ -30,7 +30,7 @@ import { useRouter } from "next/navigation";
 const registerFormSchema = z
   .object({
     name: z.string().min(2, "Name must be at least 2 characters."),
-    email: z.string().email("Please enter a valid email address."),
+    email: z.string().min(1, "Username is required."),
     password: z.string().min(6, "Password must be at least 6 characters."),
     confirmPassword: z.string(),
   })
@@ -110,9 +110,9 @@ export default function RegisterPage() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input placeholder="m@example.com" {...field} />
+                    <Input placeholder="johndoe" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
