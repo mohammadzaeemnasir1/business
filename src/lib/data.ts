@@ -11,17 +11,21 @@ const usersPath = path.join(process.cwd(), 'src', 'lib', 'users.json');
 
 function readData<T>(filePath: string): T {
   try {
+    // Create the file with an empty array if it doesn't exist.
+    if (!fs.existsSync(filePath)) {
+        fs.writeFileSync(filePath, '[]', 'utf-8');
+    }
     const jsonString = fs.readFileSync(filePath, 'utf-8');
+    // If the file is empty, return an empty array to prevent JSON parsing errors.
+    if (jsonString.trim() === '') {
+        return [] as T;
+    }
     return JSON.parse(jsonString);
   } catch (error) {
     console.error(`Error reading or parsing ${filePath}:`, error);
-    // If file doesn't exist or is empty, return empty array.
-    if ((error as NodeJS.ErrnoException).code === 'ENOENT' || error instanceof SyntaxError) {
-      // Create the file if it doesn't exist.
-      if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-        fs.writeFileSync(filePath, '[]');
-      }
-      return [] as T;
+     if (error instanceof SyntaxError) {
+        // If JSON is invalid, return empty array
+        return [] as T;
     }
     throw error;
   }
