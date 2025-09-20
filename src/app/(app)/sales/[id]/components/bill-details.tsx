@@ -119,7 +119,7 @@ export function BillDetails({ sale, customer, items }: BillDetailsProps) {
       <Card className="bill-card rounded-none sm:rounded-lg border-0 sm:border">
         <CardHeader className="bg-muted/50 print:bg-transparent">
           <div className="flex flex-col items-center gap-4 text-center">
-              <h1 className="font-headline text-2xl font-bold text-primary shop-name">Fancy Pearls</h1>
+              <h1 className="font-headline text-2xl font-bold text-primary shop-name">Alpha by ZaeemAI</h1>
               <div id="qr-code-placeholder">
                 {saleUrl && <QRCodeSVG value={saleUrl} size={80} />}
               </div>

@@ -39,7 +39,7 @@ export function Nav({ user }: { user: User }) {
         <Link href="/dashboard" className="flex items-center gap-2">
             <ShoppingBag className="w-8 h-8 text-primary" />
             <h2 className="font-headline text-xl font-semibold text-primary-foreground tracking-tight">
-                FancyPearls
+                Alpha by ZaeemAI
             </h2>
         </Link>
       </SidebarHeader>

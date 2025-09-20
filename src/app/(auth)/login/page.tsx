@@ -60,7 +60,7 @@ export default function LoginPage() {
           <ShoppingBag className="w-12 h-12 text-primary" />
         </div>
         <CardTitle className="font-headline text-3xl">
-          FancyPearls Tracker
+          Alpha by ZaeemAI
         </CardTitle>
         <CardDescription>
           Welcome back! Please sign in to continue.

@@ -3,8 +3,8 @@ import { Toaster } from "@/components/ui/toaster"
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "FancyPearls Tracker",
-  description: "Manage finances and inventory for your cloth shop.",
+  title: "Alpha by ZaeemAI",
+  description: "Business Management Suite",
 };
 
 export default function RootLayout({
