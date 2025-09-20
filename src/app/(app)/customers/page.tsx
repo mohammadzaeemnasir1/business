@@ -1,6 +1,6 @@
 import { PageHeader } from "@/components/page-header";
 import { AddSaleForm } from "./components/add-sale-form";
-import { CustomerList } from "./components/customer-list";
+import { SalesList } from "./components/sales-list";
 import { getCustomers, getSales, getAllInventoryItems } from "@/lib/data";
 
 export default function CustomersPage() {
@@ -17,7 +17,7 @@ export default function CustomersPage() {
         />
         <AddSaleForm inventoryItems={inventoryItems} />
       </div>
-      <CustomerList customers={customers} sales={sales} />
+      <SalesList sales={sales} customers={customers} inventoryItems={inventoryItems}/>
     </div>
   );
 }
