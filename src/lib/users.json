@@ -5,5 +5,12 @@
     "email": "admin@example.com",
     "password": "admin",
     "role": "admin"
+  },
+  {
+    "id": "2",
+    "name": "Mohammad Zaeem Nasir",
+    "email": "mohammadzaeemnasir1@gmail.com",
+    "password": "Zaeem@2025",
+    "role": "sales"
   }
 ]

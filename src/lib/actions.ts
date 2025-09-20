@@ -1,9 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getDealers, saveDealer, getBills, saveBill, deleteDealerById, getCustomers, saveCustomer, getSales, saveSale, getInventoryItemById, updateInventoryItem, saveUser, getUserByEmail, getUsers } from "./data";
+import { getDealers, saveDealer, getBills, saveBill, deleteDealerById, getCustomers, saveCustomer, getSales, saveSale, getInventoryItemById, updateInventoryItem, saveUser, getUserByEmail, getUsers, saveSession, clearSession } from "./data";
 import type { Dealer, Bill, InventoryItem, Payment, Sale, Customer, SaleItem, User } from "./types";
 import { format } from "date-fns";
+import { redirect } from "next/navigation";
 
 export async function addDealer(data: { name: string; contact: string }) {
   await new Promise(resolve => setTimeout(resolve, 1000));
@@ -178,4 +179,28 @@ export async function registerUser(data: { name: string, email: string, password
     revalidatePath("/login");
     
     return { success: true };
+}
+
+export async function signIn(data: {email: string, password?: string}) {
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    const { email, password } = data;
+
+    const user = getUserByEmail(email);
+
+    if (!user || user.password !== password) {
+        return { error: "Invalid email or password." };
+    }
+
+    // In a real app, you'd create a session token (e.g., JWT)
+    // For this demo, we'll just store the user's ID to simulate a session
+    saveSession({ userId: user.id });
+
+    revalidatePath("/", "layout");
+    redirect('/dashboard');
+}
+
+export async function signOut() {
+    clearSession();
+    revalidatePath("/", "layout");
+    redirect('/login');
 }

@@ -63,3 +63,7 @@ export interface User {
   image?: string | null;
   role: "admin" | "sales";
 }
+
+export interface Session {
+    userId?: string;
+}

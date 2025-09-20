@@ -1,4 +1,4 @@
-import type { Dealer, Bill, InventoryItem, Customer, Sale, User } from './types';
+import type { Dealer, Bill, InventoryItem, Customer, Sale, User, Session } from './types';
 import fs from 'fs';
 import path from 'path';
 
@@ -7,25 +7,27 @@ const billsPath = path.join(process.cwd(), 'src', 'lib', 'bills.json');
 const customersPath = path.join(process.cwd(), 'src', 'lib', 'customers.json');
 const salesPath = path.join(process.cwd(), 'src', 'lib', 'sales.json');
 const usersPath = path.join(process.cwd(), 'src', 'lib', 'users.json');
+const sessionPath = path.join(process.cwd(), 'src', 'lib', 'session.json');
 
 
 function readData<T>(filePath: string): T {
   try {
-    // Create the file with an empty array if it doesn't exist.
+    // Create the file with an empty array/object if it doesn't exist.
     if (!fs.existsSync(filePath)) {
-        fs.writeFileSync(filePath, '[]', 'utf-8');
+        const initialData = filePath.endsWith('session.json') ? '{}' : '[]';
+        fs.writeFileSync(filePath, initialData, 'utf-8');
     }
     const jsonString = fs.readFileSync(filePath, 'utf-8');
-    // If the file is empty, return an empty array to prevent JSON parsing errors.
+    // If the file is empty, return an empty array/object to prevent JSON parsing errors.
     if (jsonString.trim() === '') {
-        return [] as T;
+        return (filePath.endsWith('session.json') ? {} : []) as T;
     }
     return JSON.parse(jsonString);
   } catch (error) {
     console.error(`Error reading or parsing ${filePath}:`, error);
      if (error instanceof SyntaxError) {
-        // If JSON is invalid, return empty array
-        return [] as T;
+        // If JSON is invalid, return empty array/object
+        return (filePath.endsWith('session.json') ? {} : []) as T;
     }
     throw error;
   }
@@ -51,6 +53,10 @@ function writeUsers(data: User[]) {
     fs.writeFileSync(usersPath, JSON.stringify(data, null, 2));
 }
 
+function writeSession(data: Session) {
+    fs.writeFileSync(sessionPath, JSON.stringify(data, null, 2));
+}
+
 
 // Mock Data - This will now be read from JSON files
 export const getDealers = (): Dealer[] => readData<Dealer[]>(dealersPath);
@@ -58,6 +64,7 @@ export const getBills = (): Bill[] => readData<Bill[]>(billsPath);
 export const getCustomers = (): Customer[] => readData<Customer[]>(customersPath);
 export const getSales = (): Sale[] => readData<Sale[]>(salesPath);
 export const getUsers = (): User[] => readData<User[]>(usersPath);
+export const getSession = (): Session => readData<Session>(sessionPath);
 
 
 export function saveDealer(dealer: Dealer) {
@@ -115,6 +122,14 @@ export function saveUser(user: User) {
     writeUsers(users);
 }
 
+export function saveSession(session: Session) {
+    writeSession(session);
+}
+
+export function clearSession() {
+    writeSession({});
+}
+
 
 export function deleteDealerById(dealerId: string) {
     const dealers = getDealers();
@@ -134,6 +149,8 @@ export const getDealerById = (id: string) => getDealers().find(d => d.id === id)
 export const getSaleById = (id: string) => getSales().find(s => s.id === id);
 
 export const getCustomerById = (id: string) => getCustomers().find(c => c.id === id);
+
+export const getUserById = (id: string) => getUsers().find(u => u.id === id);
 
 export const getUserByEmail = (email: string) => getUsers().find(u => u.email?.toLowerCase() === email.toLowerCase());
 

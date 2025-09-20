@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Users, Boxes, ShoppingBag, Building } from "lucide-react";
+import { LayoutDashboard, Users, Boxes, ShoppingBag, Building, LogOut } from "lucide-react";
 import {
   Sidebar,
   SidebarHeader,
@@ -12,7 +12,9 @@ import {
   SidebarFooter,
   SidebarContent,
 } from "@/components/ui/sidebar";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { signOut } from "@/lib/actions";
+
 
 const navItems = [
   { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
@@ -53,7 +55,12 @@ export function Nav() {
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter>
-         {/* Can add user profile or settings here later */}
+        <form action={signOut} className="w-full">
+            <Button variant="ghost" className="w-full justify-start text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
+                <LogOut className="mr-2" />
+                <span>Sign Out</span>
+            </Button>
+        </form>
       </SidebarFooter>
     </Sidebar>
   );
