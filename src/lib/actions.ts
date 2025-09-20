@@ -152,9 +152,9 @@ export async function addSale(data: {
 }
 
 
-export async function registerUser(data: { name: string, email: string, password?: string }) {
+export async function registerUser(data: { name: string, email: string, password?: string, role?: "admin" | "sales" | "Pending" }) {
     await new Promise(resolve => setTimeout(resolve, 1000));
-    const { name, email, password } = data;
+    const { name, email, password, role } = data;
 
     const users = getUsers();
     const existingUser = getUserByEmail(email);
@@ -171,12 +171,13 @@ export async function registerUser(data: { name: string, email: string, password
         name,
         email,
         password, // This is insecure, for demonstration only.
-        role: "Pending", // Default role
+        role: role || "Pending",
     };
 
     saveUser(newUser);
 
     revalidatePath("/login");
+    revalidatePath("/admin");
     
     return { success: true };
 }
@@ -191,8 +192,6 @@ export async function signIn(data: {email: string, password?: string}) {
         return { error: "Invalid email or password." };
     }
 
-    // In a real app, you'd create a session token (e.g., JWT)
-    // For this demo, we'll just store the user's ID to simulate a session
     saveSession({ userId: user.id });
 
     revalidatePath("/", "layout");

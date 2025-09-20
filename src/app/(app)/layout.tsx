@@ -20,7 +20,7 @@ export default async function AppLayout({
   return (
     <SidebarProvider>
       <div className="flex min-h-screen">
-        <Nav />
+        <Nav user={session} />
         <SidebarInset>
           <div className="p-4 sm:p-6 lg:p-8">
             <div className="md:hidden mb-4">
