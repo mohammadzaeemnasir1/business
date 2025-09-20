@@ -33,7 +33,7 @@ export default function DealersPage() {
           <TableHeader>
             <TableRow>
               <TableHead>Dealer</TableHead>
-              <TableHead>Contact</TableHead>
+              <TableHead>Contact Number</TableHead>
               <TableHead className="text-right">Outstanding Balance</TableHead>
               <TableHead className="w-[180px]"></TableHead>
             </TableRow>

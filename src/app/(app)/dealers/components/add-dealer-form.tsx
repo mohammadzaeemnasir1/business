@@ -29,7 +29,7 @@ import { useToast } from "@/hooks/use-toast";
 
 const dealerFormSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
-  contact: z.string().email("Please enter a valid email address."),
+  contact: z.string().min(1, "Contact number is required."),
 });
 
 export function AddDealerForm() {
@@ -101,9 +101,9 @@ export function AddDealerForm() {
               name="contact"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Contact Email</FormLabel>
+                  <FormLabel>Contact Number</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., sales@example.com" {...field} />
+                    <Input placeholder="e.g., 0300-1234567" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
