@@ -84,3 +84,25 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@media print {
+  body {
+    background: #fff;
+  }
+  .no-print {
+    display: none;
+  }
+  .print-container {
+    padding: 0 !important;
+  }
+  .bill-card {
+    border: none;
+    box-shadow: none;
+  }
+  .shop-name {
+      color: black !important;
+  }
+  .thank-you {
+      color: black !important;
+  }
+}

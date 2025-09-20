@@ -84,6 +84,8 @@ export function saveCustomer(customer: Customer) {
 
 export function saveSale(sale: Sale) {
     const sales = getSales();
+    const newId = (sales.length > 0 ? Math.max(...sales.map(s => parseInt(s.id.replace('s', '')))) : 0) + 1;
+    sale.id = `s${newId}`;
     sales.push(sale);
     writeSales(sales);
 }
@@ -103,6 +105,10 @@ export function deleteDealerById(dealerId: string) {
 
 // Helper Functions
 export const getDealerById = (id: string) => getDealers().find(d => d.id === id);
+
+export const getSaleById = (id: string) => getSales().find(s => s.id === id);
+
+export const getCustomerById = (id: string) => getCustomers().find(c => c.id === id);
 
 export const getBillsForDealer = (dealerId: string) => getBills().filter(b => b.dealerId === dealerId);
 

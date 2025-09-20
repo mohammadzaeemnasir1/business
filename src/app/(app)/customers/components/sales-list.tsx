@@ -1,4 +1,5 @@
 import type { Customer, Sale, InventoryItem } from "@/lib/types";
+import Link from "next/link";
 import {
   Table,
   TableBody,
@@ -75,8 +76,7 @@ export function SalesList({ sales, customers, inventoryItems }: SalesListProps) 
                 </TableCell>
                 <TableCell className="text-right">
                   <Button asChild variant="outline" size="sm">
-                    {/* This will eventually link to /sales/[id] */}
-                    <a href="#">View Details</a>
+                    <Link href={`/sales/${sale.id}`}>View Details</Link>
                   </Button>
                 </TableCell>
               </TableRow>
