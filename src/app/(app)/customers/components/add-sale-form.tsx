@@ -46,6 +46,7 @@ const saleItemSchema = z.object({
 
 const saleFormSchema = z.object({
   customerName: z.string().min(2, "Customer name is required."),
+  customerContact: z.string().optional(),
   saleType: z.enum(["cash", "credit"]),
   items: z.array(saleItemSchema).min(1, "At least one item is required."),
   amountPaid: z.coerce.number().min(0, "Paid amount cannot be negative."),
@@ -65,6 +66,7 @@ export function AddSaleForm({ inventoryItems }: AddSaleFormProps) {
     resolver: zodResolver(saleFormSchema),
     defaultValues: {
       customerName: "",
+      customerContact: "",
       saleType: "cash",
       items: [{ inventoryItemId: "", quantity: 1, salePrice: 0 }],
       amountPaid: 0,
@@ -154,7 +156,22 @@ export function AddSaleForm({ inventoryItems }: AddSaleFormProps) {
                         </FormItem>
                     )}
                 />
-                <FormField
+                 <FormField
+                    control={form.control}
+                    name="customerContact"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Customer Contact (Optional)</FormLabel>
+                        <FormControl>
+                            <Input placeholder="e.g., 0300-1234567" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                />
+            </div>
+             <div className="grid grid-cols-1">
+                 <FormField
                     control={form.control}
                     name="saleType"
                     render={({ field }) => (
@@ -175,7 +192,7 @@ export function AddSaleForm({ inventoryItems }: AddSaleFormProps) {
                         </FormItem>
                     )}
                 />
-            </div>
+             </div>
             
             <Separator />
             

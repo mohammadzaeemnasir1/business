@@ -100,6 +100,7 @@ export async function deleteDealer(dealerId: string) {
 
 export async function addSale(data: {
     customerName: string;
+    customerContact?: string;
     saleType: 'cash' | 'credit';
     items: { inventoryItemId: string; quantity: number; salePrice: number }[];
     amountPaid: number;
@@ -115,9 +116,15 @@ export async function addSale(data: {
         customer = {
             id: newId.toString(),
             name: data.customerName,
+            contact: data.customerContact,
             avatarUrl: `https://picsum.photos/seed/cust${newId}/40/40`,
         };
         saveCustomer(customer);
+    } else {
+        if (data.customerContact) {
+            customer.contact = data.customerContact;
+            saveCustomer(customer);
+        }
     }
     
     const sales = getSales();
