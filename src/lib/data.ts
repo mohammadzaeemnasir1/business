@@ -131,6 +131,8 @@ export const getSaleById = (id: string) => getSales().find(s => s.id === id);
 
 export const getCustomerById = (id: string) => getCustomers().find(c => c.id === id);
 
+export const getUserByEmail = (email: string) => getUsers().find(u => u.email?.toLowerCase() === email.toLowerCase());
+
 export const getBillsForDealer = (dealerId: string) => getBills().filter(b => b.dealerId === dealerId);
 
 export const getPaidAmountForBill = (bill: Bill) => bill.payments.reduce((acc, p) => acc + p.amount, 0);

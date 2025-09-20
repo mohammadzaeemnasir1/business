@@ -1,8 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getDealers, saveDealer, getBills, saveBill, deleteDealerById, getCustomers, saveCustomer, getSales, saveSale, getInventoryItemById, updateInventoryItem } from "./data";
-import type { Dealer, Bill, InventoryItem, Payment, Sale, Customer, SaleItem } from "./types";
+import { getDealers, saveDealer, getBills, saveBill, deleteDealerById, getCustomers, saveCustomer, getSales, saveSale, getInventoryItemById, updateInventoryItem, saveUser, getUserByEmail } from "./data";
+import type { Dealer, Bill, InventoryItem, Payment, Sale, Customer, SaleItem, User } from "./types";
 import { format } from "date-fns";
 
 export async function addDealer(data: { name: string; contact: string }) {
@@ -148,4 +148,34 @@ export async function addSale(data: {
     revalidatePath("/dashboard");
 
     return newSale;
+}
+
+
+export async function registerUser(data: { name: string, email: string, password?: string }) {
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    const { name, email, password } = data;
+
+    const existingUser = getUserByEmail(email);
+
+    if (existingUser) {
+        return { error: "User with this email already exists." };
+    }
+
+    const users = getUsers();
+    const newId = (users.length > 0 ? Math.max(...users.map(u => parseInt(u.id))) : 0) + 1;
+
+    // In a real app, you MUST hash the password. Storing plain text is insecure.
+    const newUser: User = {
+        id: newId.toString(),
+        name,
+        email,
+        password, // This is insecure, for demonstration only.
+        role: "sales", // Default role
+    };
+
+    saveUser(newUser);
+
+    revalidatePath("/login");
+    
+    return { success: true };
 }

@@ -59,6 +59,7 @@ export interface User {
   id: string;
   name?: string | null;
   email?: string | null;
+  password?: string | null;
   image?: string | null;
   role: "admin" | "sales";
 }
