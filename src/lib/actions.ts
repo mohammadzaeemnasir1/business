@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getDealers, saveDealer, getBills, saveBill, deleteDealerById, getCustomers, saveCustomer, saveSale, getInventoryItemById, updateInventoryItem } from "./data";
+import { getDealers, saveDealer, getBills, saveBill, deleteDealerById, getCustomers, saveCustomer, getSales, saveSale, getInventoryItemById, updateInventoryItem } from "./data";
 import type { Dealer, Bill, InventoryItem, Payment, Sale, Customer, SaleItem } from "./types";
 import { format } from "date-fns";
 
