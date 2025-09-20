@@ -38,7 +38,6 @@ export function BillDetails({ sale, customer, items }: BillDetailsProps) {
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
              <div className="space-y-1">
                 <h1 className="font-headline text-2xl font-bold text-primary shop-name">Fancy Pearls</h1>
-                <p className="text-muted-foreground text-sm">Contact us  +92 320 5271274</p>
             </div>
             <div className="flex items-center gap-2 no-print">
                 <Button onClick={handlePrint} variant="outline">
