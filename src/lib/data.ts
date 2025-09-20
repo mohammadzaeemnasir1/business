@@ -142,6 +142,13 @@ export function deleteDealerById(dealerId: string) {
     writeBills(updatedBills);
 }
 
+export function deleteUserById(userId: string) {
+    const users = getUsers();
+    const updatedUsers = users.filter(u => u.id !== userId);
+    writeUsers(updatedUsers);
+}
+
+
 
 // Helper Functions
 export const getDealerById = (id: string) => getDealers().find(d => d.id === id);

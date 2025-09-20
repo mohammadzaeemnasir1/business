@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { EditStaffForm } from "./components/edit-staff-form";
+import { DeleteUserDialog } from "./components/delete-user-dialog";
 
 export default async function AdminPage() {
   const user = await auth();
@@ -64,8 +65,9 @@ export default async function AdminPage() {
                       {user.role}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-right">
+                  <TableCell className="text-right flex justify-end gap-2">
                       <EditStaffForm user={user} />
+                      <DeleteUserDialog userId={user.id} />
                   </TableCell>
                 </TableRow>
               ))}

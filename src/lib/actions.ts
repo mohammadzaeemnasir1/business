@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getDealers, saveDealer, getBills, saveBill, deleteDealerById, getCustomers, saveCustomer, getSales, saveSale, getInventoryItemById, updateInventoryItem, saveUser, getUserByEmail, getUsers, saveSession, clearSession, getUserById } from "./data";
+import { getDealers, saveDealer, getBills, saveBill, deleteDealerById, getCustomers, saveCustomer, getSales, saveSale, getInventoryItemById, updateInventoryItem, saveUser, getUserByEmail, getUsers, saveSession, clearSession, getUserById, deleteUserById } from "./data";
 import type { Dealer, Bill, InventoryItem, Payment, Sale, Customer, SaleItem, User } from "./types";
 import { format } from "date-fns";
 import { redirect } from "next/navigation";
@@ -209,6 +209,13 @@ export async function updateUser(data: { id: string, name: string, email: string
     
     return { success: true };
 }
+
+export async function deleteUser(userId: string) {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    deleteUserById(userId);
+    revalidatePath("/admin");
+}
+
 
 export async function signIn(data: {email: string, password?: string}) {
     await new Promise(resolve => setTimeout(resolve, 1000));
