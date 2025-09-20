@@ -1,4 +1,4 @@
-import type { Dealer, Bill, InventoryItem, Customer, Sale } from './types';
+import type { Dealer, Bill, InventoryItem, Customer, Sale, User } from './types';
 import fs from 'fs';
 import path from 'path';
 
@@ -6,6 +6,8 @@ const dealersPath = path.join(process.cwd(), 'src', 'lib', 'dealers.json');
 const billsPath = path.join(process.cwd(), 'src', 'lib', 'bills.json');
 const customersPath = path.join(process.cwd(), 'src', 'lib', 'customers.json');
 const salesPath = path.join(process.cwd(), 'src', 'lib', 'sales.json');
+const usersPath = path.join(process.cwd(), 'src', 'lib', 'users.json');
+
 
 function readData<T>(filePath: string): T {
   try {
@@ -41,12 +43,17 @@ function writeSales(data: Sale[]) {
   fs.writeFileSync(salesPath, JSON.stringify(data, null, 2));
 }
 
+function writeUsers(data: User[]) {
+    fs.writeFileSync(usersPath, JSON.stringify(data, null, 2));
+}
+
 
 // Mock Data - This will now be read from JSON files
 export const getDealers = (): Dealer[] => readData<Dealer[]>(dealersPath);
 export const getBills = (): Bill[] => readData<Bill[]>(billsPath);
 export const getCustomers = (): Customer[] => readData<Customer[]>(customersPath);
 export const getSales = (): Sale[] => readData<Sale[]>(salesPath);
+export const getUsers = (): User[] => readData<User[]>(usersPath);
 
 
 export function saveDealer(dealer: Dealer) {
@@ -84,10 +91,24 @@ export function saveCustomer(customer: Customer) {
 
 export function saveSale(sale: Sale) {
     const sales = getSales();
-    const newId = (sales.length > 0 ? Math.max(...sales.map(s => parseInt(s.id.replace('s', '')))) : 0) + 1;
-    sale.id = `s${newId}`;
-    sales.push(sale);
+    const existingIndex = sales.findIndex(s => s.id === sale.id);
+     if (existingIndex > -1) {
+        sales[existingIndex] = sale;
+    } else {
+       sales.push(sale);
+    }
     writeSales(sales);
+}
+
+export function saveUser(user: User) {
+    const users = getUsers();
+    const existingIndex = users.findIndex(u => u.id === user.id);
+    if (existingIndex > -1) {
+        users[existingIndex] = user;
+    } else {
+        users.push(user);
+    }
+    writeUsers(users);
 }
 
 

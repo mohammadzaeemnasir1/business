@@ -54,3 +54,11 @@ export interface Sale {
   amountPaid: number;
   paymentMethod: "cash" | "card" | "mobile_payment";
 }
+
+export interface User {
+  id: string;
+  name?: string | null;
+  email?: string | null;
+  image?: string | null;
+  role: "admin" | "sales";
+}
