@@ -32,6 +32,11 @@ export function BillDetails({ sale, customer, items }: BillDetailsProps) {
   const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
   const balanceDue = subtotal - sale.amountPaid;
 
+  // Fix for hydration error by correcting timezone handling
+  const [year, month, day] = sale.date.split('-').map(Number);
+  const saleDate = new Date(Date.UTC(year, month - 1, day));
+
+
   return (
     <Card className="bill-card">
       <CardHeader className="bg-muted/50 print:bg-transparent">
@@ -53,7 +58,7 @@ export function BillDetails({ sale, customer, items }: BillDetailsProps) {
             </div>
             <div className="text-right">
                 <p><span className="font-semibold">Bill Number:</span> {sale.id}</p>
-                <p><span className="font-semibold">Date:</span> {format(new Date(sale.date), "dd MMM, yyyy")}</p>
+                <p><span className="font-semibold">Date:</span> {format(saleDate, "dd MMM, yyyy")}</p>
             </div>
         </div>
       </CardHeader>
