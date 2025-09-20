@@ -42,24 +42,15 @@ export default function LoginPage() {
   });
 
   async function onSubmit(values: z.infer<typeof loginFormSchema>) {
-    try {
-      const error = await signIn(values);
-      if (error) {
-        toast({
-          variant: "destructive",
-          title: "Sign In Failed",
-          description: error,
-        });
-      }
-      // On success, the action redirects, so no success toast is needed here.
-    } catch (error) {
-      // This will now only catch unexpected errors, not the redirect.
+    const error = await signIn(values);
+    if (error) {
       toast({
         variant: "destructive",
         title: "Sign In Failed",
-        description: "An unexpected error occurred. Please try again.",
+        description: error,
       });
     }
+    // On success, the action redirects, so no other logic is needed here.
   }
 
   return (
