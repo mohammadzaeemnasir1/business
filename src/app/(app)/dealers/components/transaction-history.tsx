@@ -30,7 +30,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DateRange } from "react-day-picker";
-import { addDays, format } from "date-fns";
+import { addDays, format, parseISO } from "date-fns";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CalendarIcon, ChevronDown, ListFilter, ArrowUpDown } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
@@ -69,7 +69,7 @@ export function TransactionHistory({ data }: { data: Transaction[] }) {
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       ),
-      cell: ({ row }) => new Date(row.original.date).toLocaleDateString(),
+      cell: ({ row }) => format(parseISO(row.original.date), "dd/MM/yyyy"),
     },
     {
       accessorKey: "billNumber",
