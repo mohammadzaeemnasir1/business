@@ -7,6 +7,7 @@ import { formatCurrency } from "@/lib/utils";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Printer } from "lucide-react";
+import { QRCodeSVG } from 'qrcode.react';
 
 type DetailedItem = {
     name: string;
@@ -35,7 +36,8 @@ export function BillDetails({ sale, customer, items }: BillDetailsProps) {
   // Fix for hydration error by correcting timezone handling
   const [year, month, day] = sale.date.split('-').map(Number);
   const saleDate = new Date(Date.UTC(year, month - 1, day));
-
+  
+  const saleUrl = typeof window !== 'undefined' ? `${window.location.origin}/sales/${sale.id}`: '';
 
   return (
     <Card className="bill-card">
@@ -44,11 +46,14 @@ export function BillDetails({ sale, customer, items }: BillDetailsProps) {
              <div className="space-y-1">
                 <h1 className="font-headline text-2xl font-bold text-primary shop-name">Fancy Pearls</h1>
             </div>
-            <div className="flex items-center gap-2 no-print">
-                <Button onClick={handlePrint} variant="outline">
-                    <Printer className="mr-2"/>
-                    Print Bill
-                </Button>
+             <div className="flex items-center gap-4">
+                {saleUrl && <QRCodeSVG value={saleUrl} size={80} />}
+                <div className="flex items-center gap-2 no-print">
+                    <Button onClick={handlePrint} variant="outline">
+                        <Printer className="mr-2"/>
+                        Print Bill
+                    </Button>
+                </div>
             </div>
         </div>
         <div className="border-t pt-4 mt-4 flex justify-between text-sm">

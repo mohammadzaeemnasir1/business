@@ -77,7 +77,7 @@ export function SalesList({ sales, customers, inventoryItems }: SalesListProps) 
                 </TableCell>
                 <TableCell className="text-right flex justify-end gap-2">
                   <Button asChild variant="outline" size="sm">
-                    <Link href={`/sales/${sale.id}`}>View Details</Link>
+                    <Link href={`/sales/${sale.id}`}>Print Bill</Link>
                   </Button>
                   <DeleteSaleDialog saleId={sale.id} />
                 </TableCell>
