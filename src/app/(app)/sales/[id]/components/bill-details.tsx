@@ -5,7 +5,7 @@ import type { Customer, Sale } from "@/lib/types";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { formatCurrency } from "@/lib/utils";
-import { format } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 import { Button } from "@/components/ui/button";
 import { Download, Loader2 } from "lucide-react";
 import { QRCodeSVG } from 'qrcode.react';
@@ -41,16 +41,6 @@ export function BillDetails({ sale, customer, items }: BillDetailsProps) {
     if (!billElement) return;
 
     setIsDownloading(true);
-
-    // Temporarily remove print-only styles to capture full content
-    const printStyles = document.createElement('style');
-    printStyles.innerHTML = `
-      @media print {
-        .no-print { display: block !important; }
-        .print-container { padding: 1rem !important; }
-      }
-    `;
-    document.head.appendChild(printStyles);
     
     // Hide the download button itself before taking the screenshot
     const downloadButton = document.getElementById('download-button');
@@ -70,7 +60,6 @@ export function BillDetails({ sale, customer, items }: BillDetailsProps) {
 
     // Show the button again
     if(downloadButton) downloadButton.style.display = 'flex';
-    document.head.removeChild(printStyles);
 
     const imgData = canvas.toDataURL('image/png');
     
@@ -107,9 +96,7 @@ export function BillDetails({ sale, customer, items }: BillDetailsProps) {
   const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
   const balanceDue = subtotal - sale.amountPaid;
 
-  // Fix for hydration error by correctly parsing the date as UTC
-  const [year, month, day] = sale.date.split('-').map(Number);
-  const saleDate = new Date(Date.UTC(year, month - 1, day));
+  const saleDate = sale.date; // The date is already a string like "YYYY-MM-DD"
 
   return (
     <>
@@ -144,7 +131,7 @@ export function BillDetails({ sale, customer, items }: BillDetailsProps) {
               </div>
               <div className="text-right">
                   <p><span className="font-semibold">Bill Number:</span> {sale.id}</p>
-                  <p><span className="font-semibold">Date:</span> {format(saleDate, "dd MMM, yyyy")}</p>
+                  <p><span className="font-semibold">Date:</span> {formatInTimeZone(saleDate, 'UTC', 'dd MMM, yyyy')}</p>
               </div>
           </div>
         </CardHeader>
