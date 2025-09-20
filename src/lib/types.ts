@@ -13,7 +13,7 @@ export interface Payment {
 }
 
 export interface InventoryItem {
-  id: string;
+  id:string;
   brand: string;
   description: string;
   quantity: number;

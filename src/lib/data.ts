@@ -71,6 +71,24 @@ export function saveBill(bill: Bill) {
     writeBills(bills);
 }
 
+export function saveCustomer(customer: Customer) {
+    const customers = getCustomers();
+    const existingIndex = customers.findIndex(c => c.id === customer.id);
+    if (existingIndex > -1) {
+        customers[existingIndex] = customer;
+    } else {
+        customers.push(customer);
+    }
+    writeCustomers(customers);
+}
+
+export function saveSale(sale: Sale) {
+    const sales = getSales();
+    sales.push(sale);
+    writeSales(sales);
+}
+
+
 export function deleteDealerById(dealerId: string) {
     const dealers = getDealers();
     const bills = getBills();
@@ -104,6 +122,30 @@ export const getTotalOutstandingDebt = () => {
 export const getAllInventoryItems = (): InventoryItem[] => {
     return getBills().flatMap(b => b.items);
 }
+
+export const getInventoryItemById = (id: string): InventoryItem | undefined => {
+    const bills = getBills();
+    for (const bill of bills) {
+        const item = bill.items.find(i => i.id === id);
+        if (item) {
+            return item;
+        }
+    }
+    return undefined;
+}
+
+export function updateInventoryItem(updatedItem: InventoryItem) {
+    const bills = getBills();
+    for (const bill of bills) {
+        const itemIndex = bill.items.findIndex(i => i.id === updatedItem.id);
+        if (itemIndex > -1) {
+            bill.items[itemIndex] = updatedItem;
+            writeBills(bills);
+            return;
+        }
+    }
+}
+
 
 export const getTotalInventoryValue = () => {
     return getAllInventoryItems().reduce((total, item) => total + (item.quantity * item.costPerUnit), 0);

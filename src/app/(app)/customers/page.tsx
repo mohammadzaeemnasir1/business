@@ -1,6 +1,12 @@
 import { PageHeader } from "@/components/page-header";
+import { AddSaleForm } from "./components/add-sale-form";
+import { CustomerList } from "./components/customer-list";
+import { getCustomers, getSales } from "@/lib/data";
 
 export default function CustomersPage() {
+  const customers = getCustomers();
+  const sales = getSales();
+
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
@@ -8,10 +14,9 @@ export default function CustomersPage() {
           title="Customers"
           description="Manage your customer sales and records."
         />
+        <AddSaleForm />
       </div>
-      <div className="border rounded-lg h-96 flex items-center justify-center">
-        <p className="text-muted-foreground">Customer sales functionality coming soon.</p>
-      </div>
+      <CustomerList customers={customers} sales={sales} />
     </div>
   );
 }

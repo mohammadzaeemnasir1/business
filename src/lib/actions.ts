@@ -1,8 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getDealers, saveDealer, getBills, saveBill, deleteDealerById } from "./data";
-import type { Dealer, Bill, InventoryItem, Payment } from "./types";
+import { getDealers, saveDealer, getBills, saveBill, deleteDealerById, getCustomers, saveCustomer, saveSale, getInventoryItemById, updateInventoryItem } from "./data";
+import type { Dealer, Bill, InventoryItem, Payment, Sale, Customer, SaleItem } from "./types";
 import { format } from "date-fns";
 
 export async function addDealer(data: { name: string; contact: string }) {
@@ -81,6 +81,8 @@ export async function addBill(data: {
 
   revalidatePath(`/dealers/${data.dealerId}`);
   revalidatePath("/dashboard");
+  revalidatePath("/inventory");
+
 
   return newBill;
 }
@@ -92,4 +94,58 @@ export async function deleteDealer(dealerId: string) {
 
     revalidatePath("/dealers");
     revalidatePath("/dashboard");
+    revalidatePath("/inventory");
+}
+
+export async function addSale(data: {
+    customerName: string;
+    saleType: 'cash' | 'credit';
+    items: { inventoryItemId: string; quantity: number; salePrice: number }[];
+    amountPaid: number;
+    paymentMethod: 'cash' | 'card' | 'mobile_payment';
+}) {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    const customers = getCustomers();
+    let customer = customers.find(c => c.name.toLowerCase() === data.customerName.toLowerCase());
+
+    if (!customer) {
+        const newId = (customers.length > 0 ? Math.max(...customers.map(c => parseInt(c.id))) : 0) + 1;
+        customer = {
+            id: newId.toString(),
+            name: data.customerName,
+            avatarUrl: `https://picsum.photos/seed/cust${newId}/40/40`,
+        };
+        saveCustomer(customer);
+    }
+    
+    const sales = getSales();
+    const newSaleId = (sales.length > 0 ? Math.max(...sales.map(s => parseInt(s.id.replace('s', '')))) : 0) + 1;
+
+    const newSale: Sale = {
+        id: `s${newSaleId}`,
+        customerId: customer.id,
+        date: format(new Date(), "yyyy-MM-dd"),
+        saleType: data.saleType,
+        items: data.items,
+        amountPaid: data.amountPaid,
+        paymentMethod: data.paymentMethod,
+    };
+
+    saveSale(newSale);
+
+    // Update inventory
+    for (const item of data.items) {
+        const inventoryItem = getInventoryItemById(item.inventoryItemId);
+        if (inventoryItem) {
+            inventoryItem.quantity -= item.quantity;
+            updateInventoryItem(inventoryItem);
+        }
+    }
+    
+    revalidatePath("/customers");
+    revalidatePath("/inventory");
+    revalidatePath("/dashboard");
+
+    return newSale;
 }
