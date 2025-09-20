@@ -1,3 +1,28 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "dealer-1",
+      "description": "Avatar for Sana Safinaz Official",
+      "imageUrl": "https://picsum.photos/seed/1/40/40",
+      "imageHint": "portrait person"
+    },
+    {
+      "id": "dealer-2",
+      "description": "Avatar for Sapphire Retail",
+      "imageUrl": "https://picsum.photos/seed/2/40/40",
+      "imageHint": "portrait person"
+    },
+    {
+      "id": "dealer-3",
+      "description": "Avatar for Khaadi Fabrics",
+      "imageUrl": "https://picsum.photos/seed/3/40/40",
+      "imageHint": "portrait person"
+    },
+    {
+      "id": "dealer-4",
+      "description": "Avatar for Gul Ahmed Ideas",
+      "imageUrl": "https://picsum.photos/seed/4/40/40",
+      "imageHint": "portrait person"
+    }
+  ]
 }
