@@ -1,1 +1,27 @@
-[]
+
+[
+  {
+    "id": "1",
+    "name": "Sana Safinaz Official",
+    "contact": "0300-1112233",
+    "avatarUrl": "https://picsum.photos/seed/1/40/40"
+  },
+  {
+    "id": "2",
+    "name": "Sapphire Retail",
+    "contact": "0321-4455667",
+    "avatarUrl": "https://picsum.photos/seed/2/40/40"
+  },
+  {
+    "id": "3",
+    "name": "Khaadi Fabrics",
+    "contact": "0333-7788990",
+    "avatarUrl": "https://picsum.photos/seed/3/40/40"
+  },
+  {
+    "id": "4",
+    "name": "Gul Ahmed Ideas",
+    "contact": "0345-1231231",
+    "avatarUrl": "https://picsum.photos/seed/4/40/40"
+  }
+]

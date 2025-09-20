@@ -1,7 +1,15 @@
+
 [
   {
     "id": "1",
-    "name": "Zaeem Nasir",
+    "name": "Ayesha Khan",
+    "contact": "0311-9876543",
     "avatarUrl": "https://picsum.photos/seed/cust1/40/40"
+  },
+  {
+    "id": "2",
+    "name": "Fatima Ahmed",
+    "contact": "0322-1234567",
+    "avatarUrl": "https://picsum.photos/seed/cust2/40/40"
   }
 ]

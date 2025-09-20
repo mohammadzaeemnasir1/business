@@ -1,1 +1,23 @@
-[]
+
+[
+  {
+    "id": "s1",
+    "customerId": "1",
+    "date": "2024-05-20",
+    "saleType": "credit",
+    "items": [
+      {
+        "inventoryItemId": "i1",
+        "quantity": 1,
+        "salePrice": 5000
+      },
+      {
+        "inventoryItemId": "i3",
+        "quantity": 1,
+        "salePrice": 6500
+      }
+    ],
+    "amountPaid": 10000,
+    "paymentMethod": "cash"
+  }
+]

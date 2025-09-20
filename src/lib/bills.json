@@ -1,1 +1,58 @@
-[]
+
+[
+  {
+    "id": "b1",
+    "dealerId": "1",
+    "billNumber": "SS-2024-001",
+    "date": "2024-05-10",
+    "totalAmount": 150000,
+    "payments": [
+      {
+        "id": "p1",
+        "amount": 100000,
+        "date": "2024-05-10",
+        "payer": "Muhammad Faisal"
+      }
+    ],
+    "items": [
+      {
+        "id": "i1",
+        "brand": "Sana Safinaz Lawn",
+        "description": "3-Piece Unstitched",
+        "quantity": 20,
+        "costPerUnit": 4000
+      },
+      {
+        "id": "i2",
+        "brand": "Sana Safinaz Pret",
+        "description": "Kurti",
+        "quantity": 10,
+        "costPerUnit": 7000
+      }
+    ]
+  },
+  {
+    "id": "b2",
+    "dealerId": "2",
+    "billNumber": "SPR-2024-005",
+    "date": "2024-05-15",
+    "totalAmount": 75000,
+    "payments": [
+      {
+        "id": "p2",
+        "amount": 75000,
+        "date": "2024-05-15",
+        "payer": "Mr. Hafiz Abdul Rasheed"
+      }
+    ],
+    "items": [
+      {
+        "id": "i3",
+        "brand": "Sapphire Lawn",
+        "description": "2-Piece Stitched",
+        "quantity": 15,
+        "costPerUnit": 5000
+      }
+    ]
+  }
+]
