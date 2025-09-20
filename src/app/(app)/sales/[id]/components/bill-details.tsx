@@ -107,7 +107,7 @@ export function BillDetails({ sale, customer, items }: BillDetailsProps) {
   const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
   const balanceDue = subtotal - sale.amountPaid;
 
-  // Fix for hydration error by correcting timezone handling
+  // Fix for hydration error by correctly parsing the date as UTC
   const [year, month, day] = sale.date.split('-').map(Number);
   const saleDate = new Date(Date.UTC(year, month - 1, day));
 
