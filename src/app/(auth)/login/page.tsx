@@ -21,7 +21,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { ShoppingBag, Loader2 } from "lucide-react";
 import { signIn } from "@/lib/actions";
 import { useToast } from "@/hooks/use-toast";
@@ -97,15 +96,7 @@ export default function LoginPage() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <div className="flex items-center justify-between">
-                    <FormLabel>Password</FormLabel>
-                    <Link
-                      href="#"
-                      className="text-sm font-medium text-primary hover:underline"
-                    >
-                      Forgot Password?
-                    </Link>
-                  </div>
+                  <FormLabel>Password</FormLabel>
                   <FormControl>
                     <Input type="password" placeholder="Enter your password" {...field} />
                   </FormControl>
