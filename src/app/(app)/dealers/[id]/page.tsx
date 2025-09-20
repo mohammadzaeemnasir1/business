@@ -27,7 +27,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, PlusCircle } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import { AddBillForm } from "../components/add-bill-form";
 
 export default function DealerDetailPage({ params }: { params: { id: string } }) {
   const dealer = getDealerById(params.id);
@@ -72,10 +73,7 @@ export default function DealerDetailPage({ params }: { params: { id: string } })
       <div className="space-y-4">
         <div className="flex items-center justify-between">
             <h2 className="font-headline text-2xl font-semibold">Transaction History</h2>
-            <Button disabled>
-                <PlusCircle className="mr-2" />
-                Log New Bill
-            </Button>
+            <AddBillForm dealerId={dealer.id} />
         </div>
         <div className="border rounded-lg">
           <Table>
