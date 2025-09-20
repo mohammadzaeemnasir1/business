@@ -81,6 +81,7 @@ export default function DealerDetailPage({ params }: { params: { id: string } })
               <TableRow>
                 <TableHead>Date</TableHead>
                 <TableHead>Bill #</TableHead>
+                <TableHead>Paid By</TableHead>
                 <TableHead className="text-right">Total Amount</TableHead>
                 <TableHead className="text-right">Amount Paid</TableHead>
                 <TableHead className="text-right">Balance</TableHead>
@@ -90,10 +91,15 @@ export default function DealerDetailPage({ params }: { params: { id: string } })
               {bills.map((bill) => {
                 const paidAmount = getPaidAmountForBill(bill);
                 const balance = getOutstandingBalanceForBill(bill);
+                const payers = bill.payments.map(p => p.payer).join(', ');
+
                 return (
                   <TableRow key={bill.id}>
                     <TableCell>{new Date(bill.date).toLocaleDateString()}</TableCell>
                     <TableCell className="font-medium">{bill.billNumber}</TableCell>
+                    <TableCell className="text-muted-foreground text-xs">
+                      {payers || 'N/A'}
+                    </TableCell>
                     <TableCell className="text-right">{formatCurrency(bill.totalAmount)}</TableCell>
                     <TableCell className="text-right text-green-600">{formatCurrency(paidAmount)}</TableCell>
                     <TableCell className="text-right font-semibold">
@@ -104,7 +110,7 @@ export default function DealerDetailPage({ params }: { params: { id: string } })
               })}
               {bills.length === 0 && (
                 <TableRow>
-                    <TableCell colSpan={5} className="text-center text-muted-foreground h-24">
+                    <TableCell colSpan={6} className="text-center text-muted-foreground h-24">
                         No bills logged for this dealer.
                     </TableCell>
                 </TableRow>
