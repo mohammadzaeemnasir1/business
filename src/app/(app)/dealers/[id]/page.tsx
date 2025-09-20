@@ -72,7 +72,7 @@ export default function DealerDetailPage({ params }: { params: { id: string } })
       <div className="space-y-4">
         <div className="flex items-center justify-between">
             <h2 className="font-headline text-2xl font-semibold">Transaction History</h2>
-            <Button>
+            <Button disabled>
                 <PlusCircle className="mr-2" />
                 Log New Bill
             </Button>

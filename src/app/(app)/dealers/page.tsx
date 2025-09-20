@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { formatCurrency } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { PlusCircle } from "lucide-react";
+import { AddDealerForm } from "./components/add-dealer-form";
 
 export default function DealersPage() {
   const dealers = getDealers();
@@ -24,10 +24,7 @@ export default function DealersPage() {
           title="Dealers"
           description="Manage your relationships with suppliers."
         />
-        <Button>
-          <PlusCircle className="mr-2" />
-          Add Dealer
-        </Button>
+        <AddDealerForm />
       </div>
       
       <div className="border rounded-lg">
