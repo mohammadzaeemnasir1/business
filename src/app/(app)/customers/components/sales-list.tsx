@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency } from "@/lib/utils";
 import { format } from "date-fns";
+import { DeleteSaleDialog } from "./delete-sale-dialog";
 
 type SalesListProps = {
   sales: Sale[];
@@ -56,7 +57,7 @@ export function SalesList({ sales, customers, inventoryItems }: SalesListProps) 
             <TableHead>Date</TableHead>
             <TableHead className="text-right">Total</TableHead>
             <TableHead className="text-center">Status</TableHead>
-            <TableHead className="w-[140px]"></TableHead>
+            <TableHead className="w-[180px]"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -74,10 +75,11 @@ export function SalesList({ sales, customers, inventoryItems }: SalesListProps) 
                         {status}
                     </Badge>
                 </TableCell>
-                <TableCell className="text-right">
+                <TableCell className="text-right flex justify-end gap-2">
                   <Button asChild variant="outline" size="sm">
                     <Link href={`/sales/${sale.id}`}>View Details</Link>
                   </Button>
+                  <DeleteSaleDialog saleId={sale.id} />
                 </TableCell>
               </TableRow>
             );

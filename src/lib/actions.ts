@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getDealers, saveDealer, getBills, saveBill, deleteDealerById, getCustomers, saveCustomer, getSales, saveSale, getInventoryItemById, updateInventoryItem, saveUser, getUserByEmail, getUsers, saveSession, clearSession, getUserById, deleteUserById } from "./data";
+import { getDealers, saveDealer, getBills, saveBill, deleteDealerById, getCustomers, saveCustomer, getSales, saveSale, getInventoryItemById, updateInventoryItem, saveUser, getUserByEmail, getUsers, saveSession, clearSession, getUserById, deleteUserById, deleteSaleById } from "./data";
 import type { Dealer, Bill, InventoryItem, Payment, Sale, Customer, SaleItem, User } from "./types";
 import { format } from "date-fns";
 import { redirect } from "next/navigation";
@@ -149,6 +149,14 @@ export async function addSale(data: {
     revalidatePath("/dashboard");
 
     return newSale;
+}
+
+export async function deleteSale(saleId: string) {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    deleteSaleById(saleId);
+    revalidatePath("/customers");
+    revalidatePath("/inventory");
+    revalidatePath("/dashboard");
 }
 
 

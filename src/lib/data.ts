@@ -148,6 +148,26 @@ export function deleteUserById(userId: string) {
     writeUsers(updatedUsers);
 }
 
+export function deleteSaleById(saleId: string) {
+    const sales = getSales();
+    const saleToDelete = sales.find(s => s.id === saleId);
+
+    if (!saleToDelete) {
+        return; // Or throw an error
+    }
+
+    // Restock inventory
+    for (const item of saleToDelete.items) {
+        const inventoryItem = getInventoryItemById(item.inventoryItemId);
+        if (inventoryItem) {
+            inventoryItem.quantity += item.quantity;
+            updateInventoryItem(inventoryItem);
+        }
+    }
+
+    const updatedSales = sales.filter(s => s.id !== saleId);
+    writeSales(updatedSales);
+}
 
 
 // Helper Functions
