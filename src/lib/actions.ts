@@ -189,7 +189,7 @@ export async function signIn(data: {email: string, password?: string}) {
     const user = getUserByEmail(email);
 
     if (!user || user.password !== password) {
-        return { error: "Invalid email or password." };
+        return "Invalid email or password.";
     }
 
     saveSession({ userId: user.id });

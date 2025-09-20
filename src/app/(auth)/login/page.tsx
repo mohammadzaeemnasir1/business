@@ -44,16 +44,17 @@ export default function LoginPage() {
 
   async function onSubmit(values: z.infer<typeof loginFormSchema>) {
     try {
-      const result = await signIn(values);
-      if (result?.error) {
+      const error = await signIn(values);
+      if (error) {
         toast({
           variant: "destructive",
           title: "Sign In Failed",
-          description: result.error,
+          description: error,
         });
       }
       // On success, the action redirects, so no success toast is needed here.
     } catch (error) {
+      // This will now only catch unexpected errors, not the redirect.
       toast({
         variant: "destructive",
         title: "Sign In Failed",
