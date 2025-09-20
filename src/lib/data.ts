@@ -1,89 +1,64 @@
 import type { Dealer, Bill, InventoryItem } from './types';
+import fs from 'fs';
+import path from 'path';
 
-// Mock Data
-export const dealers: Dealer[] = [
-  { id: '1', name: 'Sana Safinaz Official', contact: 'sales@sanasafinaz.com', avatarUrl: 'https://picsum.photos/seed/1/40/40' },
-  { id: '2', name: 'Sapphire Retail', contact: 'support@sapphire.pk', avatarUrl: 'https://picsum.photos/seed/2/40/40' },
-  { id: '3', name: 'Khaadi Fabrics', contact: 'info@khaadi.com', avatarUrl: 'https://picsum.photos/seed/3/40/40' },
-  { id: '4', name: 'Gul Ahmed Ideas', contact: 'care@gulahmed.com', avatarUrl: 'https://picsum.photos/seed/4/40/40' },
-];
+const dealersPath = path.join(process.cwd(), 'src', 'lib', 'dealers.json');
+const billsPath = path.join(process.cwd(), 'src', 'lib', 'bills.json');
 
-export const bills: Bill[] = [
-  {
-    id: 'b1',
-    dealerId: '1',
-    billNumber: 'SS-2024-001',
-    date: '2024-05-01',
-    totalAmount: 150000,
-    payments: [
-      { id: 'p1', amount: 100000, date: '2024-05-02', payer: 'Faisal' },
-    ],
-    items: [
-      { id: 'i1', brand: 'Sana Safinaz', description: 'Luxury Lawn Suit', quantity: 20, costPerUnit: 5000 },
-      { id: 'i2', brand: 'Sana Safinaz', description: 'Embroidered Unstitched', quantity: 10, costPerUnit: 5000 },
-    ],
-  },
-  {
-    id: 'b2',
-    dealerId: '2',
-    billNumber: 'SAP-2024-005',
-    date: '2024-05-10',
-    totalAmount: 220000,
-    payments: [
-      { id: 'p2', amount: 150000, date: '2024-05-11', payer: 'Hafiz' },
-      { id: 'p3', amount: 50000, date: '2024-05-20', payer: 'Faisal' },
-    ],
-    items: [
-      { id: 'i3', brand: 'Sapphire', description: 'Printed Lawn 3-Piece', quantity: 50, costPerUnit: 3000 },
-      { id: 'i4', brand: 'Sapphire', description: 'West-Pret Kurti', quantity: 20, costPerUnit: 3500 },
-    ],
-  },
-  {
-    id: 'b3',
-    dealerId: '3',
-    billNumber: 'KH-2024-112',
-    date: '2024-05-15',
-    totalAmount: 80000,
-    payments: [],
-    items: [
-      { id: 'i5', brand: 'Khaadi', description: 'Unstitched 2-Piece', quantity: 20, costPerUnit: 4000 },
-    ],
-  },
-   {
-    id: 'b4',
-    dealerId: '1',
-    billNumber: 'SS-2024-002',
-    date: '2024-06-01',
-    totalAmount: 75000,
-    payments: [
-      { id: 'p4', amount: 75000, date: '2024-06-02', payer: 'Faisal' },
-    ],
-    items: [
-      { id: 'i6', brand: 'Sana Safinaz', description: 'Ready-to-wear Kurta', quantity: 15, costPerUnit: 5000 },
-    ],
-  },
-  {
-    id: 'b5',
-    dealerId: '4',
-    billNumber: 'GA-2024-030',
-    date: '2024-06-05',
-    totalAmount: 300000,
-    payments: [
-      { id: 'p5', amount: 150000, date: '2024-06-06', payer: 'Hafiz' },
-    ],
-    items: [
-      { id: 'i7', brand: 'Gul Ahmed', description: 'Festive Collection Suit', quantity: 30, costPerUnit: 7000 },
-      { id: 'i8', brand: 'Gul Ahmed', description: 'Ideas Home Bedding', quantity: 10, costPerUnit: 9000 },
-    ],
-  },
-];
+function readData<T>(filePath: string): T {
+  try {
+    const jsonString = fs.readFileSync(filePath, 'utf-8');
+    return JSON.parse(jsonString);
+  } catch (error) {
+    console.error(`Error reading or parsing ${filePath}:`, error);
+    // If file doesn't exist or is empty, return empty array.
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT' || error instanceof SyntaxError) {
+      return [] as T;
+    }
+    throw error;
+  }
+}
+
+function writeDealers(data: Dealer[]) {
+  fs.writeFileSync(dealersPath, JSON.stringify(data, null, 2));
+}
+
+function writeBills(data: Bill[]) {
+  fs.writeFileSync(billsPath, JSON.stringify(data, null, 2));
+}
+
+
+// Mock Data - This will now be read from JSON files
+export const getDealers = (): Dealer[] => readData<Dealer[]>(dealersPath);
+export const getBills = (): Bill[] => readData<Bill[]>(billsPath);
+
+export function saveDealer(dealer: Dealer) {
+    const dealers = getDealers();
+    const existingIndex = dealers.findIndex(d => d.id === dealer.id);
+    if (existingIndex > -1) {
+        dealers[existingIndex] = dealer;
+    } else {
+        dealers.push(dealer);
+    }
+    writeDealers(dealers);
+}
+
+export function saveBill(bill: Bill) {
+    const bills = getBills();
+    const existingIndex = bills.findIndex(b => b.id === bill.id);
+    if (existingIndex > -1) {
+        bills[existingIndex] = bill;
+    } else {
+        bills.push(bill);
+    }
+    writeBills(bills);
+}
+
 
 // Helper Functions
-export const getDealers = () => dealers;
+export const getDealerById = (id: string) => getDealers().find(d => d.id === id);
 
-export const getDealerById = (id: string) => dealers.find(d => d.id === id);
-
-export const getBillsForDealer = (dealerId: string) => bills.filter(b => b.dealerId === dealerId);
+export const getBillsForDealer = (dealerId: string) => getBills().filter(b => b.dealerId === dealerId);
 
 export const getPaidAmountForBill = (bill: Bill) => bill.payments.reduce((acc, p) => acc + p.amount, 0);
 
@@ -95,11 +70,11 @@ export const getOutstandingBalanceForDealer = (dealerId: string) => {
 };
 
 export const getTotalOutstandingDebt = () => {
-  return dealers.reduce((total, dealer) => total + getOutstandingBalanceForDealer(dealer.id), 0);
+  return getDealers().reduce((total, dealer) => total + getOutstandingBalanceForDealer(dealer.id), 0);
 };
 
 export const getAllInventoryItems = (): InventoryItem[] => {
-    return bills.flatMap(b => b.items);
+    return getBills().flatMap(b => b.items);
 }
 
 export const getTotalInventoryValue = () => {
@@ -107,7 +82,7 @@ export const getTotalInventoryValue = () => {
 }
 
 export const getAllPayments = () => {
-    return bills.flatMap(b => {
+    return getBills().flatMap(b => {
         const dealer = getDealerById(b.dealerId);
         return b.payments.map(p => ({
             ...p,

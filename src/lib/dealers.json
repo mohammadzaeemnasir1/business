@@ -1,0 +1,27 @@
+
+[
+  {
+    "id": "1",
+    "name": "Sana Safinaz Official",
+    "contact": "sales@sanasafinaz.com",
+    "avatarUrl": "https://picsum.photos/seed/1/40/40"
+  },
+  {
+    "id": "2",
+    "name": "Sapphire Retail",
+    "contact": "support@sapphire.pk",
+    "avatarUrl": "https://picsum.photos/seed/2/40/40"
+  },
+  {
+    "id": "3",
+    "name": "Khaadi Fabrics",
+    "contact": "info@khaadi.com",
+    "avatarUrl": "https://picsum.photos/seed/3/40/40"
+  },
+  {
+    "id": "4",
+    "name": "Gul Ahmed Ideas",
+    "contact": "care@gulahmed.com",
+    "avatarUrl": "https://picsum.photos/seed/4/40/40"
+  }
+]
