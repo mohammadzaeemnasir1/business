@@ -18,17 +18,9 @@ import {
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatCurrency } from "@/lib/utils";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import { ArrowLeft } from "lucide-react";
 import { AddBillForm } from "../components/add-bill-form";
+import { TransactionHistory } from "../components/transaction-history";
 
 export default function DealerDetailPage({ params }: { params: { id: string } }) {
   const dealer = getDealerById(params.id);
@@ -39,6 +31,21 @@ export default function DealerDetailPage({ params }: { params: { id: string } })
 
   const bills = getBillsForDealer(dealer.id);
   const outstandingBalance = getOutstandingBalanceForDealer(dealer.id);
+
+  const transactionData = bills.map(bill => {
+    const paidAmount = getPaidAmountForBill(bill);
+    const balance = getOutstandingBalanceForBill(bill);
+    const payers = bill.payments.map(p => p.payer).join(', ');
+    return {
+        id: bill.id,
+        date: bill.date,
+        billNumber: bill.billNumber,
+        totalAmount: bill.totalAmount,
+        paidAmount,
+        balance,
+        payers: payers || 'N/A',
+    }
+  }).sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   return (
     <div className="space-y-8">
@@ -75,49 +82,7 @@ export default function DealerDetailPage({ params }: { params: { id: string } })
             <h2 className="font-headline text-2xl font-semibold">Transaction History</h2>
             <AddBillForm dealerId={dealer.id} totalLeftBehind={outstandingBalance} />
         </div>
-        <div className="border rounded-lg">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Date</TableHead>
-                <TableHead>Bill #</TableHead>
-                <TableHead>Paid By</TableHead>
-                <TableHead className="text-right">Total Amount</TableHead>
-                <TableHead className="text-right">Amount Paid</TableHead>
-                <TableHead className="text-right">Balance</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {bills.map((bill) => {
-                const paidAmount = getPaidAmountForBill(bill);
-                const balance = getOutstandingBalanceForBill(bill);
-                const payers = bill.payments.map(p => p.payer).join(', ');
-
-                return (
-                  <TableRow key={bill.id}>
-                    <TableCell>{new Date(bill.date).toLocaleDateString()}</TableCell>
-                    <TableCell className="font-medium">{bill.billNumber}</TableCell>
-                    <TableCell className="text-muted-foreground text-xs">
-                      {payers || 'N/A'}
-                    </TableCell>
-                    <TableCell className="text-right">{formatCurrency(bill.totalAmount)}</TableCell>
-                    <TableCell className="text-right text-green-600">{formatCurrency(paidAmount)}</TableCell>
-                    <TableCell className="text-right font-semibold">
-                        <Badge variant={balance > 0 ? 'destructive' : 'secondary'}>{formatCurrency(balance)}</Badge>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-              {bills.length === 0 && (
-                <TableRow>
-                    <TableCell colSpan={6} className="text-center text-muted-foreground h-24">
-                        No bills logged for this dealer.
-                    </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
+        <TransactionHistory data={transactionData} />
       </div>
     </div>
   );
