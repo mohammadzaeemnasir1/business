@@ -38,7 +38,7 @@ export default async function AdminPage() {
             <TableHeader>
               <TableRow>
                 <TableHead>Name</TableHead>
-                <TableHead>Email</TableHead>
+                <TableHead>Username</TableHead>
                 <TableHead className="text-center">Role</TableHead>
               </TableRow>
             </TableHeader>

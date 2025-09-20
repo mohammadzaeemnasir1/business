@@ -12,5 +12,12 @@
     "email": "staff@gmail.com",
     "password": "123456",
     "role": "sales"
+  },
+  {
+    "id": "3",
+    "name": "staff",
+    "email": "staff",
+    "password": "123456",
+    "role": "sales"
   }
 ]
