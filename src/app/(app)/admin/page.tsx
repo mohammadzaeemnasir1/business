@@ -12,6 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { EditStaffForm } from "./components/edit-staff-form";
 
 export default async function AdminPage() {
   const user = await auth();
@@ -40,6 +41,7 @@ export default async function AdminPage() {
                 <TableHead>Name</TableHead>
                 <TableHead>Username</TableHead>
                 <TableHead className="text-center">Role</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -61,6 +63,9 @@ export default async function AdminPage() {
                     >
                       {user.role}
                     </Badge>
+                  </TableCell>
+                  <TableCell className="text-right">
+                      <EditStaffForm user={user} />
                   </TableCell>
                 </TableRow>
               ))}

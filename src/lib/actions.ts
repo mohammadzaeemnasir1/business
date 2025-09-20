@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getDealers, saveDealer, getBills, saveBill, deleteDealerById, getCustomers, saveCustomer, getSales, saveSale, getInventoryItemById, updateInventoryItem, saveUser, getUserByEmail, getUsers, saveSession, clearSession } from "./data";
+import { getDealers, saveDealer, getBills, saveBill, deleteDealerById, getCustomers, saveCustomer, getSales, saveSale, getInventoryItemById, updateInventoryItem, saveUser, getUserByEmail, getUsers, saveSession, clearSession, getUserById } from "./data";
 import type { Dealer, Bill, InventoryItem, Payment, Sale, Customer, SaleItem, User } from "./types";
 import { format } from "date-fns";
 import { redirect } from "next/navigation";
@@ -182,6 +182,34 @@ export async function registerUser(data: { name: string, email: string, password
     return { success: true };
 }
 
+export async function updateUser(data: { id: string, name: string, email: string, password?: string, role: "admin" | "sales" | "Pending" }) {
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    const { id, name, email, password, role } = data;
+
+    const user = getUserById(id);
+    if (!user) {
+        return { error: "User not found." };
+    }
+
+    const otherUser = getUserByEmail(email);
+    if (otherUser && otherUser.id !== id) {
+        return { error: "Another user with this username already exists." };
+    }
+    
+    user.name = name;
+    user.email = email;
+    user.role = role;
+    if (password) {
+        user.password = password;
+    }
+    
+    saveUser(user);
+
+    revalidatePath("/admin");
+    
+    return { success: true };
+}
+
 export async function signIn(data: {email: string, password?: string}) {
     await new Promise(resolve => setTimeout(resolve, 1000));
     const { email, password } = data;
@@ -189,7 +217,7 @@ export async function signIn(data: {email: string, password?: string}) {
     const user = getUserByEmail(email);
 
     if (!user || user.password !== password) {
-        return "Invalid email or password.";
+        return "Invalid username or password.";
     }
 
     saveSession({ userId: user.id });
