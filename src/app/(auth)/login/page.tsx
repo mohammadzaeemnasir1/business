@@ -125,15 +125,6 @@ export default function LoginPage() {
               )}
               Sign In
             </Button>
-            <div className="text-center text-sm text-muted-foreground">
-              Don&apos;t have an account?{" "}
-              <Link
-                href="/register"
-                className="font-semibold text-primary hover:underline"
-              >
-                Create Account
-              </Link>
-            </div>
           </CardFooter>
         </form>
       </Form>

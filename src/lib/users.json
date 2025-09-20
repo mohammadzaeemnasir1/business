@@ -19,5 +19,12 @@
     "email": "staff",
     "password": "123456",
     "role": "sales"
+  },
+  {
+    "id": "4",
+    "name": "NASIR",
+    "email": "nasir",
+    "password": "nasir123",
+    "role": "Pending"
   }
 ]
