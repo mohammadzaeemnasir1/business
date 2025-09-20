@@ -171,7 +171,7 @@ export async function registerUser(data: { name: string, email: string, password
         name,
         email,
         password, // This is insecure, for demonstration only.
-        role: "sales", // Default role
+        role: "Pending", // Default role
     };
 
     saveUser(newUser);

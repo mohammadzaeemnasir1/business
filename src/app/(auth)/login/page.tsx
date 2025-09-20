@@ -27,7 +27,7 @@ import { signIn } from "@/lib/actions";
 import { useToast } from "@/hooks/use-toast";
 
 const loginFormSchema = z.object({
-  email: z.string().email("Please enter a valid email address."),
+  email: z.string().min(1, "Username/Email is required."),
   password: z.string().min(1, "Password is required."),
 });
 
@@ -83,9 +83,9 @@ export default function LoginPage() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Username/Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="m@example.com" {...field} />
+                    <Input placeholder="admin" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -106,7 +106,7 @@ export default function LoginPage() {
                     </Link>
                   </div>
                   <FormControl>
-                    <Input type="password" {...field} />
+                    <Input type="password" placeholder="admin" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -61,7 +61,7 @@ export interface User {
   email?: string | null;
   password?: string | null;
   image?: string | null;
-  role: "admin" | "sales";
+  role: "admin" | "sales" | "Pending";
 }
 
 export interface Session {

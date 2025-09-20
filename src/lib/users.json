@@ -2,7 +2,7 @@
   {
     "id": "1",
     "name": "Admin User",
-    "email": "admin@example.com",
+    "email": "admin",
     "password": "admin",
     "role": "admin"
   },
@@ -13,4 +13,4 @@
     "password": "Zaeem@2025",
     "role": "sales"
   }
-]
+
