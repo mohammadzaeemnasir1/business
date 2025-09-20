@@ -156,13 +156,13 @@ export async function registerUser(data: { name: string, email: string, password
     await new Promise(resolve => setTimeout(resolve, 1000));
     const { name, email, password } = data;
 
+    const users = getUsers();
     const existingUser = getUserByEmail(email);
 
     if (existingUser) {
         return { error: "User with this email already exists." };
     }
 
-    const users = getUsers();
     const newId = (users.length > 0 ? Math.max(...users.map(u => parseInt(u.id))) : 0) + 1;
 
     // In a real app, you MUST hash the password. Storing plain text is insecure.
