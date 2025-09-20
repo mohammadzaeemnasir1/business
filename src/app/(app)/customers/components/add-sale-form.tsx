@@ -35,7 +35,8 @@ import { addSale } from "@/lib/actions";
 import { useToast } from "@/hooks/use-toast";
 import { cn, formatCurrency } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
-import { getAllInventoryItems } from "@/lib/data";
+import type { InventoryItem } from "@/lib/types";
+
 
 const saleItemSchema = z.object({
   inventoryItemId: z.string().min(1, "Please select an item."),
@@ -51,10 +52,14 @@ const saleFormSchema = z.object({
   paymentMethod: z.enum(["cash", "card", "mobile_payment"]),
 });
 
-export function AddSaleForm() {
+type AddSaleFormProps = {
+    inventoryItems: InventoryItem[];
+}
+
+export function AddSaleForm({ inventoryItems }: AddSaleFormProps) {
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
-  const inventoryItems = getAllInventoryItems().filter(item => item.quantity > 0);
+  const availableInventory = inventoryItems.filter(item => item.quantity > 0);
 
   const form = useForm<z.infer<typeof saleFormSchema>>({
     resolver: zodResolver(saleFormSchema),
@@ -76,7 +81,6 @@ export function AddSaleForm() {
   const watchedAmountPaid = form.watch("amountPaid");
 
   const totalPrice = watchedItems.reduce((acc, item) => {
-    const inventoryItem = inventoryItems.find(i => i.id === item.inventoryItemId);
     const price = item.salePrice || 0;
     return acc + price * (item.quantity || 0);
   }, 0);
@@ -86,7 +90,7 @@ export function AddSaleForm() {
   async function onSubmit(values: z.infer<typeof saleFormSchema>) {
     // Validate item quantities against inventory
     for (const item of values.items) {
-      const inventoryItem = inventoryItems.find(i => i.id === item.inventoryItemId);
+      const inventoryItem = availableInventory.find(i => i.id === item.inventoryItemId);
       if (!inventoryItem || item.quantity > inventoryItem.quantity) {
         toast({
           variant: "destructive",
@@ -179,7 +183,7 @@ export function AddSaleForm() {
                 <FormLabel>Items</FormLabel>
                 {fields.map((field, index) => {
                     const selectedItemId = form.watch(`items.${index}.inventoryItemId`);
-                    const selectedItem = inventoryItems.find(i => i.id === selectedItemId);
+                    const selectedItem = availableInventory.find(i => i.id === selectedItemId);
                     return (
                         <div key={field.id} className="grid grid-cols-5 gap-2 items-end">
                             <FormField
@@ -195,7 +199,7 @@ export function AddSaleForm() {
                                         </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                        {inventoryItems.map(item => (
+                                        {availableInventory.map(item => (
                                             <SelectItem key={item.id} value={item.id}>
                                                 {item.brand} ({item.quantity} left)
                                             </SelectItem>
@@ -292,8 +296,7 @@ export function AddSaleForm() {
                     <span>Total Price:</span>
                     <span>{formatCurrency(totalPrice)}</span>
                 </div>
-                 <div className="flex justify-between items-center font-semibold text-xl pt-2 border-t mt-2"
-                 className={cn("flex justify-between items-center font-semibold text-xl pt-2 border-t mt-2", remainingBalance > 0 ? 'text-destructive' : 'text-green-600')}>
+                 <div className={cn("flex justify-between items-center font-semibold text-xl pt-2 border-t mt-2", remainingBalance > 0 ? 'text-destructive' : 'text-green-600')}>
                     <span>Balance:</span>
                     <span>{formatCurrency(remainingBalance)}</span>
                 </div>
