@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { getDealers, saveDealer, getBills, saveBill, deleteDealerById } from "./data";
-import type { Dealer, Bill } from "./types";
+import type { Dealer, Bill, InventoryItem, Payment } from "./types";
 import { format } from "date-fns";
 
 export async function addDealer(data: { name: string; contact: string }) {
@@ -25,25 +25,56 @@ export async function addDealer(data: { name: string; contact: string }) {
   return newDealer;
 }
 
+type BillItem = {
+    name: string;
+    pricePerPiece: number;
+    quantity: number;
+};
+
 export async function addBill(data: {
   dealerId: string;
   billNumber: string;
   date: Date;
-  totalAmount: number;
+  items: BillItem[];
+  paidAmount: number;
+  payer: 'Muhammad Faisal' | 'Mr. Hafiz Abdul Rasheed' | null;
 }) {
   await new Promise((resolve) => setTimeout(resolve, 1000));
   
   const bills = getBills();
-  const newId = (bills.length > 0 ? Math.max(...bills.map(b => parseInt(b.id.replace('b', '')))) : 0) + 1;
+  const allItems = bills.flatMap(b => b.items);
+  const newBillId = (bills.length > 0 ? Math.max(...bills.map(b => parseInt(b.id.replace('b', '')))) : 0) + 1;
+  const newItemIdBase = (allItems.length > 0 ? Math.max(...allItems.map(i => parseInt(i.id.replace('i', '')))) : 0) + 1;
+  const newPaymentIdBase = (bills.flatMap(b => b.payments).length > 0 ? Math.max(...bills.flatMap(b => b.payments).map(p => parseInt(p.id.replace('p', '')))) : 0) + 1;
+
+  const totalAmount = data.items.reduce((acc, item) => acc + item.pricePerPiece * item.quantity, 0);
+
+  const newItems: InventoryItem[] = data.items.map((item, index) => ({
+      id: `i${newItemIdBase + index}`,
+      brand: item.name, // Using name as brand for now
+      description: item.name,
+      quantity: item.quantity,
+      costPerUnit: item.pricePerPiece,
+  }));
+
+  const newPayments: Payment[] = [];
+  if (data.paidAmount > 0 && data.payer) {
+      newPayments.push({
+          id: `p${newPaymentIdBase}`,
+          amount: data.paidAmount,
+          date: format(data.date, "yyyy-MM-dd"),
+          payer: data.payer,
+      });
+  }
 
   const newBill: Bill = {
-    id: `b${newId}`,
+    id: `b${newBillId}`,
     dealerId: data.dealerId,
     billNumber: data.billNumber,
     date: format(data.date, "yyyy-MM-dd"),
-    totalAmount: data.totalAmount,
-    payments: [],
-    items: [], // For now, we don't add items when creating a bill
+    totalAmount: totalAmount,
+    payments: newPayments,
+    items: newItems,
   };
 
   saveBill(newBill);

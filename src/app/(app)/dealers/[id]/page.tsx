@@ -73,7 +73,7 @@ export default function DealerDetailPage({ params }: { params: { id: string } })
       <div className="space-y-4">
         <div className="flex items-center justify-between">
             <h2 className="font-headline text-2xl font-semibold">Transaction History</h2>
-            <AddBillForm dealerId={dealer.id} />
+            <AddBillForm dealerId={dealer.id} totalLeftBehind={outstandingBalance} />
         </div>
         <div className="border rounded-lg">
           <Table>

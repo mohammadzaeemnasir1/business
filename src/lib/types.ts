@@ -9,7 +9,7 @@ export interface Payment {
   id: string;
   amount: number;
   date: string;
-  payer: 'Faisal' | 'Hafiz';
+  payer: 'Muhammad Faisal' | 'Mr. Hafiz Abdul Rasheed';
 }
 
 export interface InventoryItem {
