@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import type { Customer, Sale } from "@/lib/types";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -25,6 +26,12 @@ type BillDetailsProps = {
 };
 
 export function BillDetails({ sale, customer, items }: BillDetailsProps) {
+  const [saleUrl, setSaleUrl] = useState('');
+
+  useEffect(() => {
+    // This code runs only on the client, after the component has mounted.
+    setSaleUrl(window.location.href);
+  }, []);
   
   const handlePrint = () => {
     window.print();
@@ -36,8 +43,6 @@ export function BillDetails({ sale, customer, items }: BillDetailsProps) {
   // Fix for hydration error by correcting timezone handling
   const [year, month, day] = sale.date.split('-').map(Number);
   const saleDate = new Date(Date.UTC(year, month - 1, day));
-  
-  const saleUrl = typeof window !== 'undefined' ? window.location.href: '';
 
   return (
     <Card className="bill-card">
