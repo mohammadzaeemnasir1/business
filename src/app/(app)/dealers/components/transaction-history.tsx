@@ -10,6 +10,9 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
+  FilterFn,
 } from "@tanstack/react-table";
 import {
   Table,
@@ -30,7 +33,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DateRange } from "react-day-picker";
-import { addDays, format, parseISO } from "date-fns";
+import { addDays, format, parseISO, startOfDay } from "date-fns";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CalendarIcon, ChevronDown, ListFilter, ArrowUpDown } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
@@ -48,6 +51,13 @@ export type Transaction = {
 };
 
 const payersList = ["Muhammad Faisal", "Mr. Hafiz Abdul Rasheed"];
+
+const dateBetweenFilterFn: FilterFn<any> = (row, columnId, value) => {
+    const date = startOfDay(new Date(row.getValue(columnId)));
+    const [start, end] = value; // value is an array of two dates
+    if (!start || !end) return true;
+    return date >= startOfDay(start) && date <= startOfDay(end);
+}
 
 export function TransactionHistory({ data }: { data: Transaction[] }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -70,6 +80,7 @@ export function TransactionHistory({ data }: { data: Transaction[] }) {
         </Button>
       ),
       cell: ({ row }) => format(parseISO(row.original.date), "dd/MM/yyyy"),
+      filterFn: dateBetweenFilterFn,
     },
     {
       accessorKey: "billNumber",
@@ -87,7 +98,20 @@ export function TransactionHistory({ data }: { data: Transaction[] }) {
     {
       accessorKey: "payers",
       header: "Paid By",
-      cell: ({ row }) => row.original.payers || "N/A",
+      cell: ({ row }) => {
+        const payers = row.original.payers.split(', ').filter(Boolean);
+        if (payers.length === 0) return 'N/A';
+        return (
+          <div className="flex flex-col">
+            {payers.map(p => <span key={p}>{p}</span>)}
+          </div>
+        )
+      },
+      filterFn: (row, id, value) => {
+        if (!value || value.length === 0) return true;
+        const payers = row.original.payers.split(', ').filter(Boolean);
+        return payers.some(p => value.includes(p));
+      }
     },
     {
       accessorKey: "totalAmount",
@@ -130,6 +154,8 @@ export function TransactionHistory({ data }: { data: Transaction[] }) {
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
     state: {
       sorting,
       columnFilters,
@@ -137,9 +163,8 @@ export function TransactionHistory({ data }: { data: Transaction[] }) {
   });
   
   React.useEffect(() => {
-    if(date?.from && date?.to) {
-        table.getColumn("date")?.setFilterValue([date.from, date.to])
-    }
+    const dateFilter = [date?.from, date?.to];
+    table.getColumn("date")?.setFilterValue(dateFilter)
   }, [date, table]);
 
 

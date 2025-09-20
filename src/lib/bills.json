@@ -147,5 +147,36 @@
     "totalAmount": 50000,
     "payments": [],
     "items": []
+  },
+  {
+    "id": "b7",
+    "dealerId": "1",
+    "billNumber": "ASF235677",
+    "date": "2025-09-01",
+    "totalAmount": 6400,
+    "payments": [
+      {
+        "id": "p6",
+        "amount": 5400,
+        "date": "2025-09-01",
+        "payer": "Mr. Hafiz Abdul Rasheed"
+      }
+    ],
+    "items": [
+      {
+        "id": "i9",
+        "brand": "khaadi",
+        "description": "khaadi",
+        "quantity": 2,
+        "costPerUnit": 3000
+      },
+      {
+        "id": "i10",
+        "brand": "ASSSXA",
+        "description": "ASSSXA",
+        "quantity": 2,
+        "costPerUnit": 200
+      }
+    ]
   }
 ]
