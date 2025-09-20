@@ -18,6 +18,8 @@ export interface InventoryItem {
   description: string;
   quantity: number;
   costPerUnit: number;
+  name?: string; // Add name property
+  pricePerPiece?: number; // Add pricePerPiece property
 }
 
 export interface Bill {

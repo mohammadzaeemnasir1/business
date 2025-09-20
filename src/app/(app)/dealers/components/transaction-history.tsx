@@ -13,6 +13,8 @@ import {
   getFacetedRowModel,
   getFacetedUniqueValues,
   FilterFn,
+  getExpandedRowModel,
+  ExpandedState,
 } from "@tanstack/react-table";
 import {
   Table,
@@ -35,10 +37,11 @@ import {
 import { DateRange } from "react-day-picker";
 import { addDays, format, parseISO, startOfDay } from "date-fns";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon, ChevronDown, ListFilter, ArrowUpDown } from "lucide-react";
+import { CalendarIcon, ChevronDown, ListFilter, ArrowUpDown, ChevronRight } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { formatCurrency, cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
+import type { InventoryItem } from "@/lib/types";
 
 export type Transaction = {
   id: string;
@@ -48,6 +51,7 @@ export type Transaction = {
   paidAmount: number;
   balance: number;
   payers: string;
+  items: InventoryItem[];
 };
 
 const payersList = ["Muhammad Faisal", "Mr. Hafiz Abdul Rasheed"];
@@ -62,12 +66,33 @@ const dateBetweenFilterFn: FilterFn<any> = (row, columnId, value) => {
 export function TransactionHistory({ data }: { data: Transaction[] }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-  const [date, setDate] = React.useState<DateRange | undefined>({
-    from: addDays(new Date(), -90),
-    to: new Date(),
+  const [expanded, setExpanded] = React.useState<ExpandedState>({})
+  const [date, setDate] = React.useState<DateRange | undefined>(() => {
+    const today = new Date();
+    return {
+      from: startOfDay(addDays(today, -90)),
+      to: startOfDay(today),
+    };
   });
 
+
   const columns: ColumnDef<Transaction>[] = [
+     {
+      id: 'expander',
+      header: () => null,
+      cell: ({ row }) => {
+        return row.getCanExpand() ? (
+          <button
+            {...{
+              onClick: row.getToggleExpandedHandler(),
+              style: { cursor: 'pointer' },
+            }}
+          >
+            {row.getIsExpanded() ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+          </button>
+        ) : null
+      },
+    },
     {
       accessorKey: "date",
       header: ({ column }) => (
@@ -149,21 +174,25 @@ export function TransactionHistory({ data }: { data: Transaction[] }) {
   const table = useReactTable({
     data,
     columns,
+    state: {
+      sorting,
+      columnFilters,
+      expanded,
+    },
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
+    onExpandedChange: setExpanded,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
-    state: {
-      sorting,
-      columnFilters,
-    },
+    getExpandedRowModel: getExpandedRowModel(),
+    getRowCanExpand: () => true,
   });
   
   React.useEffect(() => {
-    const dateFilter = [date?.from, date?.to];
+    const dateFilter = date ? [startOfDay(date.from as Date), startOfDay(date.to as Date)] : [undefined, undefined];
     table.getColumn("date")?.setFilterValue(dateFilter)
   }, [date, table]);
 
@@ -274,8 +303,8 @@ export function TransactionHistory({ data }: { data: Transaction[] }) {
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
+                <React.Fragment key={row.id}>
                 <TableRow
-                  key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
@@ -287,6 +316,36 @@ export function TransactionHistory({ data }: { data: Transaction[] }) {
                     </TableCell>
                   ))}
                 </TableRow>
+                {row.getIsExpanded() && (
+                    <TableRow>
+                        <TableCell colSpan={columns.length} className="p-0">
+                           <div className="p-4 bg-muted/50">
+                             <h4 className="font-semibold mb-2">Bill Items</h4>
+                             <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Item Name</TableHead>
+                                        <TableHead className="text-center">Quantity</TableHead>
+                                        <TableHead className="text-right">Price/Piece</TableHead>
+                                        <TableHead className="text-right">Total</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {row.original.items.map(item => (
+                                        <TableRow key={item.id}>
+                                            <TableCell>{item.name}</TableCell>
+                                            <TableCell className="text-center">{item.quantity}</TableCell>
+                                            <TableCell className="text-right">{formatCurrency(item.pricePerPiece)}</TableCell>
+                                            <TableCell className="text-right font-medium">{formatCurrency(item.pricePerPiece * item.quantity)}</TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                             </Table>
+                           </div>
+                        </TableCell>
+                    </TableRow>
+                )}
+                </React.Fragment>
               ))
             ) : (
               <TableRow>

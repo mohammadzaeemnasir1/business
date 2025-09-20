@@ -44,6 +44,12 @@ export default function DealerDetailPage({ params }: { params: { id: string } })
         paidAmount,
         balance,
         payers: payers || 'N/A',
+        items: bill.items.map(item => ({
+            id: item.id,
+            name: item.brand, // Assuming brand is the item name for now
+            quantity: item.quantity,
+            pricePerPiece: item.costPerUnit,
+        })),
     }
   }).sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
