@@ -1,9 +1,11 @@
-import type { Dealer, Bill, InventoryItem } from './types';
+import type { Dealer, Bill, InventoryItem, Customer, Sale } from './types';
 import fs from 'fs';
 import path from 'path';
 
 const dealersPath = path.join(process.cwd(), 'src', 'lib', 'dealers.json');
 const billsPath = path.join(process.cwd(), 'src', 'lib', 'bills.json');
+const customersPath = path.join(process.cwd(), 'src', 'lib', 'customers.json');
+const salesPath = path.join(process.cwd(), 'src', 'lib', 'sales.json');
 
 function readData<T>(filePath: string): T {
   try {
@@ -13,6 +15,10 @@ function readData<T>(filePath: string): T {
     console.error(`Error reading or parsing ${filePath}:`, error);
     // If file doesn't exist or is empty, return empty array.
     if ((error as NodeJS.ErrnoException).code === 'ENOENT' || error instanceof SyntaxError) {
+      // Create the file if it doesn't exist.
+      if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+        fs.writeFileSync(filePath, '[]');
+      }
       return [] as T;
     }
     throw error;
@@ -27,10 +33,21 @@ function writeBills(data: Bill[]) {
   fs.writeFileSync(billsPath, JSON.stringify(data, null, 2));
 }
 
+function writeCustomers(data: Customer[]) {
+  fs.writeFileSync(customersPath, JSON.stringify(data, null, 2));
+}
+
+function writeSales(data: Sale[]) {
+  fs.writeFileSync(salesPath, JSON.stringify(data, null, 2));
+}
+
 
 // Mock Data - This will now be read from JSON files
 export const getDealers = (): Dealer[] => readData<Dealer[]>(dealersPath);
 export const getBills = (): Bill[] => readData<Bill[]>(billsPath);
+export const getCustomers = (): Customer[] => readData<Customer[]>(customersPath);
+export const getSales = (): Sale[] => readData<Sale[]>(salesPath);
+
 
 export function saveDealer(dealer: Dealer) {
     const dealers = getDealers();

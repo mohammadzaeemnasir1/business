@@ -31,3 +31,26 @@ export interface Bill {
   payments: Payment[];
   items: InventoryItem[];
 }
+
+export interface Customer {
+  id: string;
+  name: string;
+  contact?: string;
+  avatarUrl: string;
+}
+
+export interface SaleItem {
+  inventoryItemId: string;
+  quantity: number;
+  salePrice: number;
+}
+
+export interface Sale {
+  id: string;
+  customerId: string;
+  date: string;
+  saleType: "cash" | "credit";
+  items: SaleItem[];
+  amountPaid: number;
+  paymentMethod: "cash" | "card" | "mobile_payment";
+}

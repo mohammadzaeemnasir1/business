@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Users, Boxes, ShoppingBag } from "lucide-react";
+import { LayoutDashboard, Users, Boxes, ShoppingBag, Building } from "lucide-react";
 import {
   Sidebar,
   SidebarHeader,
@@ -16,7 +16,8 @@ import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-  { href: "/dealers", icon: Users, label: "Dealers" },
+  { href: "/dealers", icon: Building, label: "Dealers" },
+  { href: "/customers", icon: Users, label: "Customers" },
   { href: "/inventory", icon: Boxes, label: "Inventory" },
 ];
 
