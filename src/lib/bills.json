@@ -1,4 +1,3 @@
-
 [
   {
     "id": "b1",
@@ -139,5 +138,14 @@
         "costPerUnit": 9000
       }
     ]
+  },
+  {
+    "id": "b6",
+    "dealerId": "5",
+    "billNumber": "abc1234",
+    "date": "2025-09-18",
+    "totalAmount": 50000,
+    "payments": [],
+    "items": []
   }
 ]

@@ -54,6 +54,17 @@ export function saveBill(bill: Bill) {
     writeBills(bills);
 }
 
+export function deleteDealerById(dealerId: string) {
+    const dealers = getDealers();
+    const bills = getBills();
+
+    const updatedDealers = dealers.filter(d => d.id !== dealerId);
+    const updatedBills = bills.filter(b => b.dealerId !== dealerId);
+
+    writeDealers(updatedDealers);
+    writeBills(updatedBills);
+}
+
 
 // Helper Functions
 export const getDealerById = (id: string) => getDealers().find(d => d.id === id);

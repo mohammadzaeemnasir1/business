@@ -13,6 +13,7 @@ import Link from "next/link";
 import { formatCurrency } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AddDealerForm } from "./components/add-dealer-form";
+import { DeleteDealerDialog } from "./components/delete-dealer-dialog";
 
 export default function DealersPage() {
   const dealers = getDealers();
@@ -34,7 +35,7 @@ export default function DealersPage() {
               <TableHead>Dealer</TableHead>
               <TableHead>Contact</TableHead>
               <TableHead className="text-right">Outstanding Balance</TableHead>
-              <TableHead className="w-[100px]"></TableHead>
+              <TableHead className="w-[180px]"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -55,10 +56,11 @@ export default function DealersPage() {
                   <TableCell className={`text-right font-semibold ${outstandingBalance > 0 ? 'text-destructive' : 'text-green-600'}`}>
                     {formatCurrency(outstandingBalance)}
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="flex justify-end gap-2">
                     <Button asChild variant="outline" size="sm">
                       <Link href={`/dealers/${dealer.id}`}>View Details</Link>
                     </Button>
+                    <DeleteDealerDialog dealerId={dealer.id} />
                   </TableCell>
                 </TableRow>
               );

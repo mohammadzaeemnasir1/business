@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getDealers, saveDealer, getBills, saveBill } from "./data";
+import { getDealers, saveDealer, getBills, saveBill, deleteDealerById } from "./data";
 import type { Dealer, Bill } from "./types";
 import { format } from "date-fns";
 
@@ -52,4 +52,13 @@ export async function addBill(data: {
   revalidatePath("/dashboard");
 
   return newBill;
+}
+
+export async function deleteDealer(dealerId: string) {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    
+    deleteDealerById(dealerId);
+
+    revalidatePath("/dealers");
+    revalidatePath("/dashboard");
 }
