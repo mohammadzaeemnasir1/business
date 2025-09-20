@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getSaleById, getCustomerById, getInventoryItemById } from "@/lib/data";
 import { PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Printer } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { BillDetails } from "./components/bill-details";
 
 export default function SaleDetailPage({ params }: { params: { id: string } }) {
