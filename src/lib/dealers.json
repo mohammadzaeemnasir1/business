@@ -23,5 +23,101 @@
     "name": "Gul Ahmed Ideas",
     "contact": "0345-1231231",
     "avatarUrl": "https://picsum.photos/seed/4/40/40"
+  },
+  {
+    "id": "5",
+    "name": "Nishat Linen",
+    "contact": "0301-2345678",
+    "avatarUrl": "https://picsum.photos/seed/5/40/40"
+  },
+  {
+    "id": "6",
+    "name": "Alkaram Studio",
+    "contact": "0302-3456789",
+    "avatarUrl": "https://picsum.photos/seed/6/40/40"
+  },
+  {
+    "id": "7",
+    "name": "Maria.B",
+    "contact": "0303-4567890",
+    "avatarUrl": "https://picsum.photos/seed/7/40/40"
+  },
+  {
+    "id": "8",
+    "name": "Bareeze",
+    "contact": "0304-5678901",
+    "avatarUrl": "https://picsum.photos/seed/8/40/40"
+  },
+  {
+    "id": "9",
+    "name": "J.",
+    "contact": "0305-6789012",
+    "avatarUrl": "https://picsum.photos/seed/9/40/40"
+  },
+  {
+    "id": "10",
+    "name": "Ethnic by Outfitters",
+    "contact": "0306-7890123",
+    "avatarUrl": "https://picsum.photos/seed/10/40/40"
+  },
+  {
+    "id": "11",
+    "name": "Limelight",
+    "contact": "0307-8901234",
+    "avatarUrl": "https://picsum.photos/seed/11/40/40"
+  },
+  {
+    "id": "12",
+    "name": "Zellbury",
+    "contact": "0308-9012345",
+    "avatarUrl": "https://picsum.photos/seed/12/40/40"
+  },
+  {
+    "id": "13",
+    "name": "So Kamal",
+    "contact": "0309-0123456",
+    "avatarUrl": "https://picsum.photos/seed/13/40/40"
+  },
+  {
+    "id": "14",
+    "name": "Firdous Lawn",
+    "contact": "0310-1234567",
+    "avatarUrl": "https://picsum.photos/seed/14/40/40"
+  },
+  {
+    "id": "15",
+    "name": "Charizma",
+    "contact": "0311-2345678",
+    "avatarUrl": "https://picsum.photos/seed/15/40/40"
+  },
+  {
+    "id": "16",
+    "name": "Bonanza Satrangi",
+    "contact": "0312-3456789",
+    "avatarUrl": "https://picsum.photos/seed/16/40/40"
+  },
+  {
+    "id": "17",
+    "name": "Kayseria",
+    "contact": "0313-4567890",
+    "avatarUrl": "https://picsum.photos/seed/17/40/40"
+  },
+  {
+    "id": "18",
+    "name": "Warda",
+    "contact": "0314-5678901",
+    "avatarUrl": "https://picsum.photos/seed/18/40/40"
+  },
+  {
+    "id": "19",
+    "name": "Cross Stitch",
+    "contact": "0315-6789012",
+    "avatarUrl": "https://picsum.photos/seed/19/40/40"
+  },
+  {
+    "id": "20",
+    "name": "Asim Jofa",
+    "contact": "0316-7890123",
+    "avatarUrl": "https://picsum.photos/seed/20/40/40"
   }
 ]
