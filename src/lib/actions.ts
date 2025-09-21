@@ -38,7 +38,7 @@ export async function addBill(data: {
   date: Date;
   items: BillItem[];
   paidAmount: number;
-  payer: 'Muhammad Faisal' | 'Mr. Hafiz Abdul Rasheed' | null;
+  payer: string | null;
 }) {
   await new Promise((resolve) => setTimeout(resolve, 1000));
   
@@ -99,6 +99,7 @@ export async function deleteDealer(dealerId: string) {
 }
 
 export async function addSale(data: {
+    customerId: string;
     customerName: string;
     customerContact?: string;
     saleType: 'cash' | 'credit';
@@ -109,9 +110,11 @@ export async function addSale(data: {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     const customers = getCustomers();
-    let customer = customers.find(c => c.name.toLowerCase() === data.customerName.toLowerCase());
+    // customerId can be an ID or a new customer name
+    let customer = customers.find(c => c.id === data.customerId);
 
     if (!customer) {
+        // It's a new customer, create them. The ID is the name.
         const newId = (customers.length > 0 ? Math.max(...customers.map(c => parseInt(c.id))) : 0) + 1;
         customer = {
             id: newId.toString(),
@@ -121,7 +124,7 @@ export async function addSale(data: {
         };
         saveCustomer(customer);
     } else {
-        if (data.customerContact) {
+        if (data.customerContact && customer.contact !== data.customerContact) {
             customer.contact = data.customerContact;
             saveCustomer(customer);
         }

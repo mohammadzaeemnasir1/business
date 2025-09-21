@@ -7,9 +7,13 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 type CustomerListProps = {
   customers: Customer[];
@@ -39,7 +43,7 @@ export function CustomerList({ customers, sales }: CustomerListProps) {
       {customers.map((customer) => {
         const balance = getCustomerBalance(customer.id);
         return (
-          <Card key={customer.id}>
+          <Card key={customer.id} className="flex flex-col">
             <CardHeader className="flex flex-row items-center gap-4">
               <Avatar className="w-12 h-12">
                 <AvatarImage src={customer.avatarUrl} alt={customer.name} />
@@ -50,12 +54,20 @@ export function CustomerList({ customers, sales }: CustomerListProps) {
                  {customer.contact && <CardDescription>{customer.contact}</CardDescription>}
               </div>
             </CardHeader>
-            <CardContent>
+            <CardContent className="flex-grow">
                 <div className="text-sm text-muted-foreground">Outstanding Balance</div>
                 <div className={`text-2xl font-bold ${balance > 0 ? 'text-destructive' : 'text-green-600'}`}>
                     {formatCurrency(balance)}
                 </div>
             </CardContent>
+            <CardFooter>
+                <Button asChild variant="outline" className="w-full">
+                    <Link href={`/customers/${customer.id}`}>
+                        View Details
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                </Button>
+            </CardFooter>
           </Card>
         );
       })}

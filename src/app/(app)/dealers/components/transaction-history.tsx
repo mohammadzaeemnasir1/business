@@ -54,7 +54,6 @@ export type Transaction = {
   items: InventoryItem[];
 };
 
-const payersList = ["Muhammad Faisal", "Mr. Hafiz Abdul Rasheed"];
 
 const dateBetweenFilterFn: FilterFn<any> = (row, columnId, value) => {
     const date = startOfDay(new Date(row.getValue(columnId)));
@@ -74,6 +73,12 @@ export function TransactionHistory({ data }: { data: Transaction[] }) {
       to: startOfDay(today),
     };
   });
+
+  const payersList = React.useMemo(() => {
+    const payers = new Set<string>();
+    data.forEach(t => t.payers.split(', ').filter(Boolean).forEach(p => payers.add(p)));
+    return Array.from(payers);
+  }, [data]);
 
 
   const columns: ColumnDef<Transaction>[] = [
