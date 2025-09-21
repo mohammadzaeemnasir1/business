@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getDealers, saveDealer, getBills, saveBill, deleteDealerById, getCustomers, saveCustomer, getSales, saveSale, getInventoryItemById, updateInventoryItem, saveUser, getUserByEmail, getUsers, saveSession, clearSession, getUserById, deleteUserById, deleteSaleById } from "./data";
+import { getDealers, saveDealer, getBills, saveBill, deleteDealerById, getCustomers, saveCustomer, getSales, saveSale, getInventoryItemById, updateInventoryItem, saveUser, getUserByEmail, getUsers, saveSession, clearSession, getUserById, deleteUserById, deleteSaleById, getCustomerByName } from "./data";
 import type { Dealer, Bill, InventoryItem, Payment, Sale, Customer, SaleItem, User } from "./types";
 import { format } from "date-fns";
 import { redirect } from "next/navigation";
@@ -99,7 +99,6 @@ export async function deleteDealer(dealerId: string) {
 }
 
 export async function addSale(data: {
-    customerId: string;
     customerName: string;
     customerContact?: string;
     saleType: 'cash' | 'credit';
@@ -110,11 +109,10 @@ export async function addSale(data: {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     const customers = getCustomers();
-    // customerId can be an ID or a new customer name
-    let customer = customers.find(c => c.id === data.customerId);
+    let customer = getCustomerByName(data.customerName);
 
     if (!customer) {
-        // It's a new customer, create them. The ID is the name.
+        // It's a new customer, create them.
         const newId = (customers.length > 0 ? Math.max(...customers.map(c => parseInt(c.id))) : 0) + 1;
         customer = {
             id: newId.toString(),
@@ -124,6 +122,7 @@ export async function addSale(data: {
         };
         saveCustomer(customer);
     } else {
+        // Customer exists, update contact info if provided
         if (data.customerContact && customer.contact !== data.customerContact) {
             customer.contact = data.customerContact;
             saveCustomer(customer);

@@ -36,8 +36,6 @@ import { useToast } from "@/hooks/use-toast";
 import { cn, formatCurrency } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import type { InventoryItem, Customer } from "@/lib/types";
-import { Combobox } from "@/components/ui/combobox";
-
 
 const saleItemSchema = z.object({
   inventoryItemId: z.string().min(1, "Please select an item."),
@@ -46,7 +44,7 @@ const saleItemSchema = z.object({
 });
 
 const saleFormSchema = z.object({
-  customerId: z.string().min(1, "Customer name is required."),
+  customerName: z.string().min(1, "Customer name is required."),
   customerContact: z.string().optional(),
   saleType: z.enum(["cash", "credit"]),
   items: z.array(saleItemSchema).min(1, "At least one item is required."),
@@ -67,7 +65,7 @@ export function AddSaleForm({ inventoryItems, customers }: AddSaleFormProps) {
   const form = useForm<z.infer<typeof saleFormSchema>>({
     resolver: zodResolver(saleFormSchema),
     defaultValues: {
-      customerId: "",
+      customerName: "",
       customerContact: "",
       saleType: "cash",
       items: [{ inventoryItemId: "", quantity: 1, salePrice: 0 }],
@@ -83,9 +81,6 @@ export function AddSaleForm({ inventoryItems, customers }: AddSaleFormProps) {
 
   const watchedItems = form.watch("items");
   const watchedAmountPaid = form.watch("amountPaid");
-  const watchedCustomerId = form.watch("customerId");
-
-  const customerOptions = customers.map(c => ({ label: c.name, value: c.id }));
 
   const totalPrice = watchedItems.reduce((acc, item) => {
     const price = item.salePrice || 0;
@@ -109,8 +104,7 @@ export function AddSaleForm({ inventoryItems, customers }: AddSaleFormProps) {
     }
     
     try {
-      const customerName = customers.find(c => c.id === values.customerId)?.name || "New Customer";
-      await addSale({ ...values, customerName });
+      await addSale(values);
       toast({
         title: "Success",
         description: "New sale has been logged.",
@@ -151,16 +145,13 @@ export function AddSaleForm({ inventoryItems, customers }: AddSaleFormProps) {
             <div className="grid grid-cols-2 gap-4">
                 <FormField
                     control={form.control}
-                    name="customerId"
+                    name="customerName"
                     render={({ field }) => (
-                        <FormItem className="flex flex-col">
+                        <FormItem>
                         <FormLabel>Customer Name</FormLabel>
-                          <Combobox
-                              options={customerOptions}
-                              value={field.value}
-                              onChange={field.onChange}
-                              placeholder="Select or create customer..."
-                          />
+                        <FormControl>
+                            <Input placeholder="Enter customer name" {...field} />
+                        </FormControl>
                         <FormMessage />
                         </FormItem>
                     )}
