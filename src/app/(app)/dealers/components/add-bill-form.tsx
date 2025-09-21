@@ -31,7 +31,6 @@ import { addBill } from "@/lib/actions";
 import { useToast } from "@/hooks/use-toast";
 import { cn, formatCurrency } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const itemSchema = z.object({
   name: z.string().min(1, "Item name is required."),
@@ -46,7 +45,7 @@ const billFormSchema = z.object({
   }),
   items: z.array(itemSchema).min(1, "At least one item is required."),
   paidAmount: z.coerce.number().min(0, "Paid amount cannot be negative."),
-  payer: z.enum(["Muhammad Faisal", "Mr. Hafiz Abdul Rasheed"]).nullable(),
+  payer: z.string().nullable(),
 });
 
 type AddBillFormProps = {
@@ -64,7 +63,7 @@ export function AddBillForm({ dealerId, totalLeftBehind }: AddBillFormProps) {
       billNumber: "",
       items: [{ name: "", pricePerPiece: 0, quantity: 1 }],
       paidAmount: 0,
-      payer: null,
+      payer: "",
     },
   });
 
@@ -86,7 +85,7 @@ export function AddBillForm({ dealerId, totalLeftBehind }: AddBillFormProps) {
 
   async function onSubmit(values: z.infer<typeof billFormSchema>) {
     if (values.paidAmount > 0 && !values.payer) {
-        form.setError("payer", { type: "manual", message: "Please select who paid."});
+        form.setError("payer", { type: "manual", message: "Please enter who paid."});
         return;
     }
 
@@ -260,25 +259,22 @@ export function AddBillForm({ dealerId, totalLeftBehind }: AddBillFormProps) {
                     )}
                 />
                 <FormField
-                    control={form.control}
-                    name="payer"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Paid By</FormLabel>
-                         <Select onValueChange={field.onChange} defaultValue={field.value || ""} disabled={watchedPaidAmount <= 0}>
-                            <FormControl>
-                               <SelectTrigger>
-                                    <SelectValue placeholder="Select payer" />
-                                </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                                <SelectItem value="Muhammad Faisal">Muhammad Faisal</SelectItem>
-                                <SelectItem value="Mr. Hafiz Abdul Rasheed">Mr. Hafiz Abdul Rasheed</SelectItem>
-                            </SelectContent>
-                        </Select>
-                        <FormMessage />
-                        </FormItem>
-                    )}
+                  control={form.control}
+                  name="payer"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Paid By</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter payer's name"
+                          {...field}
+                          value={field.value || ''}
+                          disabled={watchedPaidAmount <= 0}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
             </div>
             
