@@ -1,4 +1,3 @@
-
 [
   {
     "id": "s1",
@@ -8,16 +7,31 @@
     "items": [
       {
         "inventoryItemId": "i1",
-        "quantity": 1,
-        "salePrice": 5000
+        "quantity": 10,
+        "salePrice": 60000
       },
       {
         "inventoryItemId": "i3",
-        "quantity": 1,
-        "salePrice": 6500
+        "quantity": 5,
+        "salePrice": 65000
       }
     ],
-    "amountPaid": 10000,
+    "amountPaid": 500000,
+    "paymentMethod": "card"
+  },
+  {
+    "id": "s2",
+    "customerId": "2",
+    "date": "2024-06-10",
+    "saleType": "cash",
+    "items": [
+      {
+        "inventoryItemId": "i4",
+        "quantity": 20,
+        "salePrice": 35000
+      }
+    ],
+    "amountPaid": 700000,
     "paymentMethod": "cash"
   }
 ]

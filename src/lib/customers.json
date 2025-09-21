@@ -1,4 +1,3 @@
-
 [
   {
     "id": "1",
@@ -11,5 +10,11 @@
     "name": "Fatima Ahmed",
     "contact": "0322-1234567",
     "avatarUrl": "https://picsum.photos/seed/cust2/40/40"
+  },
+  {
+    "id": "3",
+    "name": "Zaeem Nasir",
+    "contact": "0300-1112222",
+    "avatarUrl": "https://picsum.photos/seed/cust3/40/40"
   }
 ]

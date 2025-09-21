@@ -4,11 +4,11 @@
     "dealerId": "1",
     "billNumber": "SS-2024-001",
     "date": "2024-05-10",
-    "totalAmount": 150000,
+    "totalAmount": 50000000,
     "payments": [
       {
         "id": "p1",
-        "amount": 100000,
+        "amount": 20000000,
         "date": "2024-05-10",
         "payer": "Muhammad Faisal"
       }
@@ -17,16 +17,16 @@
       {
         "id": "i1",
         "brand": "Sana Safinaz Lawn",
-        "description": "3-Piece Unstitched",
-        "quantity": 20,
-        "costPerUnit": 4000
+        "description": "Lawn Collection 2024 (Vol. 1)",
+        "quantity": 500,
+        "costPerUnit": 50000
       },
       {
         "id": "i2",
         "brand": "Sana Safinaz Pret",
-        "description": "Kurti",
-        "quantity": 10,
-        "costPerUnit": 7000
+        "description": "Luxury Pret",
+        "quantity": 250,
+        "costPerUnit": 100000
       }
     ]
   },
@@ -35,11 +35,11 @@
     "dealerId": "2",
     "billNumber": "SPR-2024-005",
     "date": "2024-05-15",
-    "totalAmount": 75000,
+    "totalAmount": 40000000,
     "payments": [
       {
         "id": "p2",
-        "amount": 75000,
+        "amount": 10000000,
         "date": "2024-05-15",
         "payer": "Mr. Hafiz Abdul Rasheed"
       }
@@ -49,25 +49,32 @@
         "id": "i3",
         "brand": "Sapphire Lawn",
         "description": "2-Piece Stitched",
-        "quantity": 15,
-        "costPerUnit": 5000
+        "quantity": 800,
+        "costPerUnit": 50000
       }
     ]
   },
   {
     "id": "b3",
-    "dealerId": "1",
-    "billNumber": "asdf",
-    "date": "2024-07-22",
-    "totalAmount": 23,
-    "payments": [],
+    "dealerId": "3",
+    "billNumber": "KHA-2024-002",
+    "date": "2024-06-01",
+    "totalAmount": 30000000,
+    "payments": [
+      {
+        "id": "p3",
+        "amount": 5000000,
+        "date": "2024-06-01",
+        "payer": "Muhammad Faisal"
+      }
+    ],
     "items": [
       {
         "id": "i4",
-        "brand": "asd",
-        "description": "asd",
-        "quantity": 1,
-        "costPerUnit": 23
+        "brand": "Khaadi Unstitched",
+        "description": "Festive Collection",
+        "quantity": 1000,
+        "costPerUnit": 30000
       }
     ]
   }
