@@ -1,6 +1,8 @@
+
 [
   {
     "id": "s1",
+    "billNo": "B-001",
     "customerId": "1",
     "date": "2024-05-20",
     "saleType": "credit",
@@ -17,10 +19,12 @@
       }
     ],
     "amountPaid": 500000,
-    "paymentMethod": "card"
+    "paymentMethod": "card",
+    "paidTo": "Faisal Rehman"
   },
   {
     "id": "s2",
+    "billNo": "B-002",
     "customerId": "2",
     "date": "2024-06-10",
     "saleType": "cash",
@@ -32,10 +36,12 @@
       }
     ],
     "amountPaid": 700000,
-    "paymentMethod": "cash"
+    "paymentMethod": "cash",
+    "paidTo": "Hafiz Abdul Rasheed"
   },
   {
     "id": "s3",
+    "billNo": "B-003",
     "customerId": "1",
     "date": "2025-10-05",
     "saleType": "cash",
@@ -47,6 +53,7 @@
       }
     ],
     "amountPaid": 0,
-    "paymentMethod": "cash"
+    "paymentMethod": "cash",
+    "paidTo": "Faisal Rehman"
   }
 ]

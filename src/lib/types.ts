@@ -47,12 +47,14 @@ export interface SaleItem {
 
 export interface Sale {
   id: string;
+  billNo: string;
   customerId: string;
   date: string;
   saleType: "cash" | "credit";
   items: SaleItem[];
   amountPaid: number;
   paymentMethod: "cash" | "card" | "mobile_payment";
+  paidTo?: "Faisal Rehman" | "Hafiz Abdul Rasheed";
 }
 
 export const availablePermissions = [

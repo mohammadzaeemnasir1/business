@@ -51,15 +51,17 @@ const saleFormSchema = z.object({
   items: z.array(saleItemSchema).min(1, "At least one item is required."),
   amountPaid: z.coerce.number().min(0, "Paid amount cannot be negative."),
   paymentMethod: z.enum(["cash", "card", "mobile_payment"]),
+  paidTo: z.enum(["Faisal Rehman", "Hafiz Abdul Rasheed"]),
 });
 
 type AddSaleFormProps = {
     inventoryItems: InventoryItem[];
     customers: Customer[];
     sales: Sale[];
+    nextBillNo: string;
 }
 
-export function AddSaleForm({ inventoryItems, customers, sales }: AddSaleFormProps) {
+export function AddSaleForm({ inventoryItems, customers, sales, nextBillNo }: AddSaleFormProps) {
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
   const availableInventory = inventoryItems.filter(item => item.quantity > 0);
@@ -74,6 +76,7 @@ export function AddSaleForm({ inventoryItems, customers, sales }: AddSaleFormPro
       items: [{ inventoryItemId: "", quantity: 1, salePrice: 0 }],
       amountPaid: 0,
       paymentMethod: "cash",
+      paidTo: "Faisal Rehman",
     },
   });
 
@@ -187,6 +190,36 @@ export function AddSaleForm({ inventoryItems, customers, sales }: AddSaleFormPro
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 max-h-[80vh] overflow-y-auto pr-6">
+            <div className="grid grid-cols-2 gap-4">
+                <FormItem>
+                    <FormLabel>Bill No.</FormLabel>
+                    <FormControl>
+                        <Input readOnly value={nextBillNo} />
+                    </FormControl>
+                </FormItem>
+                 <FormField
+                    control={form.control}
+                    name="paidTo"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Paid To</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select who gets paid" />
+                            </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                            <SelectItem value="Faisal Rehman">Faisal Rehman</SelectItem>
+                            <SelectItem value="Hafiz Abdul Rasheed">Hafiz Abdul Rasheed</SelectItem>
+                            </SelectContent>
+                        </Select>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                />
+            </div>
+
             <div className="grid grid-cols-2 gap-4">
                 <FormField
                     control={form.control}

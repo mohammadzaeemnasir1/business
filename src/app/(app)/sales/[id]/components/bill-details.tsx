@@ -128,9 +128,10 @@ export function BillDetails({ sale, customer, items }: BillDetailsProps) {
               <div>
                   <p className="font-semibold">Bill to:</p>
                   <p>{customer.name}</p>
+                  {sale.paidTo && <p>Paid to: {sale.paidTo}</p>}
               </div>
               <div className="text-right">
-                  <p><span className="font-semibold">Bill Number:</span> {sale.id}</p>
+                  <p><span className="font-semibold">Bill Number:</span> {sale.billNo}</p>
                   <p><span className="font-semibold">Date:</span> {formatInTimeZone(saleDate, 'UTC', 'dd MMM, yyyy')}</p>
               </div>
           </div>

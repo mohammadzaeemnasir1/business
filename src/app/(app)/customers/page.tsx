@@ -8,6 +8,8 @@ export default function CustomersPage() {
   const sales = getSales();
   const inventoryItems = getAllInventoryItems();
 
+  const nextBillNo = `B-${(sales.length + 1).toString().padStart(3, '0')}`;
+
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
@@ -15,7 +17,7 @@ export default function CustomersPage() {
           title="Customers & Sales"
           description="Manage your customer records and sales history."
         />
-        <AddSaleForm inventoryItems={inventoryItems} customers={customers} sales={sales} />
+        <AddSaleForm inventoryItems={inventoryItems} customers={customers} sales={sales} nextBillNo={nextBillNo} />
       </div>
       <CustomerView customers={customers} sales={sales} inventoryItems={inventoryItems} />
     </div>

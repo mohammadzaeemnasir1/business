@@ -105,6 +105,7 @@ export async function addSale(data: {
     items: { inventoryItemId: string; quantity: number; salePrice: number }[];
     amountPaid: number;
     paymentMethod: 'cash' | 'card' | 'mobile_payment';
+    paidTo: 'Faisal Rehman' | 'Hafiz Abdul Rasheed';
 }) {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -131,15 +132,19 @@ export async function addSale(data: {
     
     const sales = getSales();
     const newSaleId = (sales.length > 0 ? Math.max(...sales.map(s => parseInt(s.id.replace('s', '')))) : 0) + 1;
+    const newBillNo = `B-${(sales.length + 1).toString().padStart(3, '0')}`;
+
 
     const newSale: Sale = {
         id: `s${newSaleId}`,
+        billNo: newBillNo,
         customerId: customer.id,
         date: format(new Date(), "yyyy-MM-dd"),
         saleType: data.saleType,
         items: data.items,
         amountPaid: data.amountPaid,
         paymentMethod: data.paymentMethod,
+        paidTo: data.paidTo,
     };
 
     saveSale(newSale);
@@ -156,6 +161,7 @@ export async function addSale(data: {
     revalidatePath("/customers");
     revalidatePath("/inventory");
     revalidatePath("/dashboard");
+    revalidatePath(`/sales/${newSale.id}`);
 
     return newSale;
 }

@@ -41,7 +41,7 @@ export default function SaleDetailPage({ params }: { params: { id: string } }) {
             </Link>
         </Button>
         <PageHeader
-            title={`Sale #${sale.id}`}
+            title={`Sale #${sale.billNo}`}
             description={`Details for sale to ${customer.name}`}
             className="text-right"
         />
