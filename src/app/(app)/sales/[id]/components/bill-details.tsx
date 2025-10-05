@@ -182,7 +182,7 @@ export function BillDetails({ sale, customer, items, totalOutstanding, lastPurch
                           <span>{formatCurrency(balanceDueOnThisBill)}</span>
                       </div>
                        <div className="flex justify-between font-bold text-lg border-t pt-2 mt-2 text-destructive">
-                          <span>Total Outstanding Balance:</span>
+                          <span>Outstanding Balance:</span>
                           <span>{formatCurrency(totalOutstanding)}</span>
                       </div>
                   </div>

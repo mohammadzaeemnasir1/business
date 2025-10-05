@@ -71,5 +71,22 @@
     "amountPaid": 50000,
     "paymentMethod": "cash",
     "paidTo": "Faisal Rehman"
+  },
+  {
+    "id": "s5",
+    "billNo": "B-005",
+    "customerId": "1",
+    "date": "2025-10-05",
+    "saleType": "cash",
+    "items": [
+      {
+        "inventoryItemId": "i2",
+        "quantity": 11,
+        "salePrice": 3320
+      }
+    ],
+    "amountPaid": 30000,
+    "paymentMethod": "cash",
+    "paidTo": "Faisal Rehman"
   }
 ]
