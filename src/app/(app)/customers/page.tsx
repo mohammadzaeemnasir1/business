@@ -15,7 +15,7 @@ export default function CustomersPage() {
           title="Customers & Sales"
           description="Manage your customer records and sales history."
         />
-        <AddSaleForm inventoryItems={inventoryItems} customers={customers} />
+        <AddSaleForm inventoryItems={inventoryItems} customers={customers} sales={sales} />
       </div>
       <CustomerView customers={customers} sales={sales} inventoryItems={inventoryItems} />
     </div>

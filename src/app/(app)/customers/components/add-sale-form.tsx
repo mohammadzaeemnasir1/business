@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -35,7 +35,8 @@ import { addSale } from "@/lib/actions";
 import { useToast } from "@/hooks/use-toast";
 import { cn, formatCurrency } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
-import type { InventoryItem, Customer } from "@/lib/types";
+import type { InventoryItem, Customer, Sale } from "@/lib/types";
+import { format } from "date-fns";
 
 const saleItemSchema = z.object({
   inventoryItemId: z.string().min(1, "Please select an item."),
@@ -55,12 +56,14 @@ const saleFormSchema = z.object({
 type AddSaleFormProps = {
     inventoryItems: InventoryItem[];
     customers: Customer[];
+    sales: Sale[];
 }
 
-export function AddSaleForm({ inventoryItems, customers }: AddSaleFormProps) {
+export function AddSaleForm({ inventoryItems, customers, sales }: AddSaleFormProps) {
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
   const availableInventory = inventoryItems.filter(item => item.quantity > 0);
+  const [customerDetails, setCustomerDetails] = useState<{balance: number, lastPurchase: string | null} | null>(null);
 
   const form = useForm<z.infer<typeof saleFormSchema>>({
     resolver: zodResolver(saleFormSchema),
@@ -81,6 +84,45 @@ export function AddSaleForm({ inventoryItems, customers }: AddSaleFormProps) {
 
   const watchedItems = form.watch("items");
   const watchedAmountPaid = form.watch("amountPaid");
+  const watchedCustomerName = form.watch("customerName");
+
+  const calculateCustomerDetails = useCallback((name: string) => {
+    const customer = customers.find(c => c.name.toLowerCase() === name.toLowerCase());
+    if (customer) {
+        const customerSales = sales.filter(s => s.customerId === customer.id);
+        const balance = customerSales.reduce((totalBalance, sale) => {
+            const saleTotal = sale.items.reduce((acc, item) => acc + item.salePrice * item.quantity, 0);
+            const saleBalance = saleTotal - sale.amountPaid;
+            return totalBalance + saleBalance;
+        }, 0);
+        
+        let lastPurchase: string | null = null;
+        if (customerSales.length > 0) {
+            const lastSale = customerSales.sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
+            lastPurchase = format(new Date(lastSale.date), "dd MMM, yyyy");
+        }
+        setCustomerDetails({ balance, lastPurchase });
+        form.setValue("customerContact", customer.contact || "");
+    } else {
+        setCustomerDetails(null);
+        form.setValue("customerContact", "");
+    }
+  }, [customers, sales, form]);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      if (watchedCustomerName) {
+        calculateCustomerDetails(watchedCustomerName);
+      } else {
+        setCustomerDetails(null);
+      }
+    }, 500); // Debounce time
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [watchedCustomerName, calculateCustomerDetails]);
+
 
   const totalPrice = watchedItems.reduce((acc, item) => {
     const price = item.salePrice || 0;
@@ -88,6 +130,7 @@ export function AddSaleForm({ inventoryItems, customers }: AddSaleFormProps) {
   }, 0);
 
   const remainingBalance = totalPrice - watchedAmountPaid;
+  const newTotalBalance = (customerDetails?.balance || 0) + remainingBalance;
 
   async function onSubmit(values: z.infer<typeof saleFormSchema>) {
     // Validate item quantities against inventory
@@ -110,6 +153,7 @@ export function AddSaleForm({ inventoryItems, customers }: AddSaleFormProps) {
         description: "New sale has been logged.",
       });
       form.reset();
+      setCustomerDetails(null);
       setOpen(false);
     } catch (error) {
       toast({
@@ -124,6 +168,7 @@ export function AddSaleForm({ inventoryItems, customers }: AddSaleFormProps) {
     <Dialog open={open} onOpenChange={(isOpen) => {
         if (!isOpen) {
             form.reset();
+            setCustomerDetails(null);
         }
         setOpen(isOpen);
     }}>
@@ -150,7 +195,7 @@ export function AddSaleForm({ inventoryItems, customers }: AddSaleFormProps) {
                         <FormItem>
                         <FormLabel>Customer Name</FormLabel>
                         <FormControl>
-                            <Input placeholder="Enter customer name" {...field} />
+                            <Input placeholder="Enter customer name to search" {...field} />
                         </FormControl>
                         <FormMessage />
                         </FormItem>
@@ -161,7 +206,7 @@ export function AddSaleForm({ inventoryItems, customers }: AddSaleFormProps) {
                     name="customerContact"
                     render={({ field }) => (
                         <FormItem>
-                        <FormLabel>Customer Contact (Optional)</FormLabel>
+                        <FormLabel>Customer Contact</FormLabel>
                         <FormControl>
                             <Input placeholder="e.g., 0300-1234567" {...field} />
                         </FormControl>
@@ -170,6 +215,24 @@ export function AddSaleForm({ inventoryItems, customers }: AddSaleFormProps) {
                     )}
                 />
             </div>
+            {customerDetails !== null && (
+                 <div className="grid grid-cols-2 gap-4">
+                    <FormItem>
+                        <FormLabel>Outstanding Balance</FormLabel>
+                        <FormControl>
+                            <Input readOnly value={formatCurrency(customerDetails.balance)} className="font-semibold text-destructive"/>
+                        </FormControl>
+                    </FormItem>
+                    <FormItem>
+                        <FormLabel>Last Purchase Date</FormLabel>
+                         <FormControl>
+                            <Input readOnly value={customerDetails.lastPurchase || 'N/A'} />
+                        </FormControl>
+                    </FormItem>
+                 </div>
+            )}
+
+
              <div className="grid grid-cols-1">
                  <FormField
                     control={form.control}
@@ -274,7 +337,7 @@ export function AddSaleForm({ inventoryItems, customers }: AddSaleFormProps) {
                     name="amountPaid"
                     render={({ field }) => (
                         <FormItem>
-                        <FormLabel>Amount Paid</FormLabel>
+                        <FormLabel>Amount Paid on This Bill</FormLabel>
                         <FormControl>
                             <Input type="number" placeholder="e.g., 5000" {...field} />
                         </FormControl>
@@ -309,13 +372,17 @@ export function AddSaleForm({ inventoryItems, customers }: AddSaleFormProps) {
             <Separator />
             
             <div className="space-y-2 rounded-lg bg-muted p-4">
-                <div className="flex justify-between items-center font-semibold text-lg">
-                    <span>Total Price:</span>
-                    <span>{formatCurrency(totalPrice)}</span>
+                <div className="flex justify-between items-center">
+                    <span>Total Price (Current Sale):</span>
+                    <span className="font-semibold text-lg">{formatCurrency(totalPrice)}</span>
                 </div>
-                 <div className={cn("flex justify-between items-center font-semibold text-xl pt-2 border-t mt-2", remainingBalance > 0 ? 'text-destructive' : 'text-green-600')}>
-                    <span>Balance:</span>
+                 <div className="flex justify-between items-center text-sm">
+                    <span>Balance (Current Sale):</span>
                     <span>{formatCurrency(remainingBalance)}</span>
+                </div>
+                 <div className={cn("flex justify-between items-center font-semibold text-xl pt-2 border-t mt-2", newTotalBalance > 0 ? 'text-destructive' : 'text-green-600')}>
+                    <span>New Total Balance:</span>
+                    <span>{formatCurrency(newTotalBalance)}</span>
                 </div>
             </div>
 

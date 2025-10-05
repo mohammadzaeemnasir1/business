@@ -178,7 +178,10 @@ export const getSaleById = (id: string) => getSales().find(s => s.id === id);
 export const getCustomerById = (id: string) => getCustomers().find(c => c.id === id);
 export const getCustomerByName = (name: string) => getCustomers().find(c => c.name.toLowerCase() === name.toLowerCase());
 
-export const getSalesByCustomerId = (customerId: string) => getSales().filter(s => s.customerId === customerId);
+export const getSalesByCustomerId = (customerId: string, allSales?: Sale[]) => {
+  const sales = allSales || getSales();
+  return sales.filter(s => s.customerId === customerId);
+}
 
 export const getUserById = (id: string) => getUsers().find(u => u.id === id);
 
