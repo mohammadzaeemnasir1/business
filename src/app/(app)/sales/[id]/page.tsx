@@ -1,10 +1,11 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getSaleById, getCustomerById, getInventoryItemById } from "@/lib/data";
+import { getSaleById, getCustomerById, getInventoryItemById, getSalesByCustomerId } from "@/lib/data";
 import { PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { BillDetails } from "./components/bill-details";
+import { format } from "date-fns";
 
 export default function SaleDetailPage({ params }: { params: { id: string } }) {
   const sale = getSaleById(params.id);
@@ -18,6 +19,23 @@ export default function SaleDetailPage({ params }: { params: { id: string } }) {
   if (!customer) {
       notFound();
   }
+
+  const customerSales = getSalesByCustomerId(customer.id);
+  
+  const outstandingBalance = customerSales.reduce((totalBalance, s) => {
+      const saleTotal = s.items.reduce((acc, item) => acc + item.salePrice * item.quantity, 0);
+      const saleBalance = saleTotal - s.amountPaid;
+      return totalBalance + saleBalance;
+  }, 0);
+
+  let lastPurchase: string | null = null;
+  if (customerSales.length > 0) {
+      const lastSale = customerSales.filter(s => s.id !== sale.id).sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
+      if (lastSale) {
+        lastPurchase = format(new Date(lastSale.date), "dd MMM, yyyy");
+      }
+  }
+
 
   const detailedItems = sale.items.map(item => {
       const inventoryItem = getInventoryItemById(item.inventoryItemId);
@@ -48,7 +66,13 @@ export default function SaleDetailPage({ params }: { params: { id: string } }) {
       </div>
       
       <div className="print-container">
-        <BillDetails sale={sale} customer={customer} items={detailedItems} />
+        <BillDetails 
+            sale={sale} 
+            customer={customer} 
+            items={detailedItems} 
+            totalOutstanding={outstandingBalance}
+            lastPurchaseDate={lastPurchase}
+        />
       </div>
 
     </div>

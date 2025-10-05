@@ -25,9 +25,11 @@ type BillDetailsProps = {
   sale: Sale;
   customer: Customer;
   items: DetailedItem[];
+  totalOutstanding: number;
+  lastPurchaseDate: string | null;
 };
 
-export function BillDetails({ sale, customer, items }: BillDetailsProps) {
+export function BillDetails({ sale, customer, items, totalOutstanding, lastPurchaseDate }: BillDetailsProps) {
   const [saleUrl, setSaleUrl] = useState('');
   const [isDownloading, setIsDownloading] = useState(false);
 
@@ -94,7 +96,7 @@ export function BillDetails({ sale, customer, items }: BillDetailsProps) {
   };
 
   const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  const balanceDue = subtotal - sale.amountPaid;
+  const balanceDueOnThisBill = subtotal - sale.amountPaid;
 
   const saleDate = sale.date; // The date is already a string like "YYYY-MM-DD"
 
@@ -124,15 +126,17 @@ export function BillDetails({ sale, customer, items }: BillDetailsProps) {
                 {saleUrl && <QRCodeSVG value={saleUrl} size={80} />}
               </div>
           </div>
-          <div className="border-t pt-4 mt-4 flex justify-between text-sm">
+          <div className="border-y py-4 mt-4 grid grid-cols-2 gap-4 text-sm">
               <div>
                   <p className="font-semibold">Bill to:</p>
                   <p>{customer.name}</p>
+                  <p>{customer.contact}</p>
                   {sale.paidTo && <p>Paid to: {sale.paidTo}</p>}
               </div>
               <div className="text-right">
                   <p><span className="font-semibold">Bill Number:</span> {sale.billNo}</p>
-                  <p><span className="font-semibold">Date:</span> {formatInTimeZone(saleDate, 'UTC', 'dd MMM, yyyy')}</p>
+                  <p><span className="font-semibold">Bill Date:</span> {formatInTimeZone(saleDate, 'UTC', 'dd MMM, yyyy')}</p>
+                   {lastPurchaseDate && <p><span className="font-semibold">Last Purchase:</span> {lastPurchaseDate}</p>}
               </div>
           </div>
         </CardHeader>
@@ -164,18 +168,22 @@ export function BillDetails({ sale, customer, items }: BillDetailsProps) {
         <CardFooter className="bg-muted/50 p-6 print:bg-transparent">
           <div className="w-full space-y-4">
               <div className="flex justify-end gap-4">
-                  <div className="w-full sm:w-1/2 md:w-1/3 space-y-2">
+                  <div className="w-full sm:w-1/2 md:w-2/3 space-y-2">
                        <div className="flex justify-between">
-                          <span>Subtotal:</span>
+                          <span>Subtotal (This Bill):</span>
                           <span>{formatCurrency(subtotal)}</span>
                       </div>
-                       <div className="flex justify-between font-semibold text-green-600">
-                          <span>Paid:</span>
+                       <div className="flex justify-between">
+                          <span>Paid (This Bill):</span>
                           <span>{formatCurrency(sale.amountPaid)}</span>
                       </div>
+                       <div className="flex justify-between font-semibold">
+                          <span>Balance (This Bill):</span>
+                          <span>{formatCurrency(balanceDueOnThisBill)}</span>
+                      </div>
                        <div className="flex justify-between font-bold text-lg border-t pt-2 mt-2 text-destructive">
-                          <span>Balance Due:</span>
-                          <span>{formatCurrency(balanceDue)}</span>
+                          <span>Total Outstanding Balance:</span>
+                          <span>{formatCurrency(totalOutstanding)}</span>
                       </div>
                   </div>
               </div>
