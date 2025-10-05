@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency } from "@/lib/utils";
-import { format } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 import { DeleteSaleDialog } from "./delete-sale-dialog";
 
 type SalesListProps = {
@@ -66,7 +66,7 @@ export function SalesList({ sales, customers, inventoryItems }: SalesListProps) 
             return (
               <TableRow key={sale.id}>
                 <TableCell className="font-medium">{customerName}</TableCell>
-                <TableCell>{format(new Date(sale.date), "dd MMM, yyyy")}</TableCell>
+                <TableCell>{formatInTimeZone(sale.date, 'UTC', 'dd MMM, yyyy')}</TableCell>
                 <TableCell className="text-right font-medium">
                   {formatCurrency(totalAmount)}
                 </TableCell>
