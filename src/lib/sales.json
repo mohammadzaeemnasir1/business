@@ -33,5 +33,20 @@
     ],
     "amountPaid": 700000,
     "paymentMethod": "cash"
+  },
+  {
+    "id": "s3",
+    "customerId": "1",
+    "date": "2025-10-05",
+    "saleType": "cash",
+    "items": [
+      {
+        "inventoryItemId": "i2",
+        "quantity": 4,
+        "salePrice": 4000
+      }
+    ],
+    "amountPaid": 0,
+    "paymentMethod": "cash"
   }
 ]

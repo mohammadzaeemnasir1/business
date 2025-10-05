@@ -17,8 +17,8 @@ import { DeleteUserDialog } from "./components/delete-user-dialog";
 
 export default async function AdminPage() {
   const user = await auth();
-  if (!user || user.role !== "admin") {
-    redirect("/dashboard");
+  if (!user || !user.permissions.includes("admin")) {
+    redirect("/customers");
   }
 
   const users = getUsers();
@@ -41,7 +41,7 @@ export default async function AdminPage() {
               <TableRow>
                 <TableHead>Name</TableHead>
                 <TableHead>Username</TableHead>
-                <TableHead className="text-center">Role</TableHead>
+                <TableHead>Permissions</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -52,22 +52,25 @@ export default async function AdminPage() {
                   <TableCell className="text-muted-foreground">
                     {user.email}
                   </TableCell>
-                  <TableCell className="text-center">
-                    <Badge
-                      variant={
-                        user.role === "admin"
-                          ? "default"
-                          : user.role === "sales"
-                          ? "secondary"
-                          : "destructive"
-                      }
-                    >
-                      {user.role}
-                    </Badge>
+                  <TableCell>
+                    <div className="flex flex-wrap gap-1">
+                    {user.permissions.map(permission => (
+                         <Badge
+                          key={permission}
+                          variant={
+                            permission === "admin"
+                              ? "default"
+                              : "secondary"
+                          }
+                        >
+                          {permission}
+                        </Badge>
+                    ))}
+                    </div>
                   </TableCell>
                   <TableCell className="text-right flex justify-end gap-2">
                       <EditStaffForm user={user} />
-                      {user.role !== 'admin' && <DeleteUserDialog userId={user.id} />}
+                      {!user.permissions.includes('admin') && <DeleteUserDialog userId={user.id} />}
                   </TableCell>
                 </TableRow>
               ))}

@@ -55,13 +55,23 @@ export interface Sale {
   paymentMethod: "cash" | "card" | "mobile_payment";
 }
 
+export const availablePermissions = [
+  { id: "customers", name: "Customers & Sales" },
+  { id: "dashboard", name: "Dashboard" },
+  { id: "dealers", name: "Dealers" },
+  { id: "inventory", name: "Inventory" },
+  { id: "admin", name: "Admin" },
+] as const;
+
+export type Permission = (typeof availablePermissions)[number]["id"];
+
 export interface User {
   id: string;
   name?: string | null;
   email?: string | null;
   password?: string | null;
   image?: string | null;
-  role: "admin" | "sales" | "Pending";
+  permissions: Permission[];
 }
 
 export interface Session {

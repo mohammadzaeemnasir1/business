@@ -23,22 +23,19 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { PlusCircle, Loader2 } from "lucide-react";
 import { registerUser } from "@/lib/actions";
 import { useToast } from "@/hooks/use-toast";
+import { availablePermissions, Permission } from "@/lib/types";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const staffFormSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
   email: z.string().min(1, "Username is required."),
   password: z.string().min(6, "Password must be at least 6 characters."),
-  role: z.enum(["admin", "sales", "Pending"]),
+  permissions: z.array(z.string()).refine((value) => value.some((item) => item), {
+    message: "You have to select at least one permission.",
+  }),
 });
 
 export function CreateStaffForm() {
@@ -51,7 +48,7 @@ export function CreateStaffForm() {
       name: "",
       email: "",
       password: "",
-      role: "sales",
+      permissions: ["dashboard"],
     },
   });
 
@@ -139,25 +136,48 @@ export function CreateStaffForm() {
             />
             <FormField
               control={form.control}
-              name="role"
-              render={({ field }) => (
+              name="permissions"
+              render={() => (
                 <FormItem>
-                  <FormLabel>Role</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a role" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="sales">Sales Staff</SelectItem>
-                      <SelectItem value="admin">Admin</SelectItem>
-                      <SelectItem value="Pending">Pending</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <div className="mb-4">
+                    <FormLabel className="text-base">Permissions</FormLabel>
+                    <p className="text-sm text-muted-foreground">
+                      Select the tabs this user can access.
+                    </p>
+                  </div>
+                  {availablePermissions.map((permission) => (
+                    <FormField
+                      key={permission.id}
+                      control={form.control}
+                      name="permissions"
+                      render={({ field }) => {
+                        return (
+                          <FormItem
+                            key={permission.id}
+                            className="flex flex-row items-start space-x-3 space-y-0"
+                          >
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(permission.id)}
+                                onCheckedChange={(checked) => {
+                                  return checked
+                                    ? field.onChange([...field.value, permission.id])
+                                    : field.onChange(
+                                        field.value?.filter(
+                                          (value) => value !== permission.id
+                                        )
+                                      );
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              {permission.name}
+                            </FormLabel>
+                          </FormItem>
+                        );
+                      }}
+                    />
+                  ))}
                   <FormMessage />
                 </FormItem>
               )}

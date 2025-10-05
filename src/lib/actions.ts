@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { getDealers, saveDealer, getBills, saveBill, deleteDealerById, getCustomers, saveCustomer, getSales, saveSale, getInventoryItemById, updateInventoryItem, saveUser, getUserByEmail, getUsers, saveSession, clearSession, getUserById, deleteUserById, deleteSaleById, getCustomerByName } from "./data";
-import type { Dealer, Bill, InventoryItem, Payment, Sale, Customer, SaleItem, User } from "./types";
+import type { Dealer, Bill, InventoryItem, Payment, Sale, Customer, SaleItem, User, Permission } from "./types";
 import { format } from "date-fns";
 import { redirect } from "next/navigation";
 
@@ -169,9 +169,9 @@ export async function deleteSale(saleId: string) {
 }
 
 
-export async function registerUser(data: { name: string, email: string, password?: string, role?: "admin" | "sales" | "Pending" }) {
+export async function registerUser(data: { name: string, email: string, password?: string, permissions: Permission[] }) {
     await new Promise(resolve => setTimeout(resolve, 1000));
-    const { name, email, password, role } = data;
+    const { name, email, password, permissions } = data;
 
     const users = getUsers();
     const existingUser = getUserByEmail(email);
@@ -188,7 +188,7 @@ export async function registerUser(data: { name: string, email: string, password
         name,
         email,
         password, // This is insecure, for demonstration only.
-        role: role || "Pending",
+        permissions,
     };
 
     saveUser(newUser);
@@ -199,9 +199,9 @@ export async function registerUser(data: { name: string, email: string, password
     return { success: true };
 }
 
-export async function updateUser(data: { id: string, name: string, email: string, password?: string, role: "admin" | "sales" | "Pending" }) {
+export async function updateUser(data: { id: string, name: string, email: string, password?: string, permissions: Permission[] }) {
     await new Promise(resolve => setTimeout(resolve, 1000));
-    const { id, name, email, password, role } = data;
+    const { id, name, email, password, permissions } = data;
 
     const user = getUserById(id);
     if (!user) {
@@ -215,7 +215,7 @@ export async function updateUser(data: { id: string, name: string, email: string
     
     user.name = name;
     user.email = email;
-    user.role = role;
+    user.permissions = permissions;
     if (password) {
         user.password = password;
     }

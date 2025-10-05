@@ -14,23 +14,22 @@ import {
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { signOut } from "@/lib/actions";
-import type { User } from "@/lib/types";
+import type { User, Permission } from "@/lib/types";
 
 
-const navItems = [
-  { href: "/customers", icon: Users, label: "Customers", requiredRole: ["admin", "sales"] },
-  { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard", requiredRole: ["admin", "sales", "Pending"] },
-  { href: "/dealers", icon: Building, label: "Dealers", requiredRole: ["admin"] },
-  { href: "/inventory", icon: Boxes, label: "Inventory", requiredRole: ["admin", "sales"] },
-  { href: "/admin", icon: ShieldCheck, label: "Admin", requiredRole: ["admin"] },
+const navItems: {href: string, icon: React.ElementType, label: string, permission: Permission}[] = [
+  { href: "/customers", icon: Users, label: "Customers", permission: "customers" },
+  { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard", permission: "dashboard" },
+  { href: "/dealers", icon: Building, label: "Dealers", permission: "dealers" },
+  { href: "/inventory", icon: Boxes, label: "Inventory", permission: "inventory" },
+  { href: "/admin", icon: ShieldCheck, label: "Admin", permission: "admin" },
 ];
 
 export function Nav({ user }: { user: User }) {
   const pathname = usePathname();
 
   const filteredNavItems = navItems.filter(item => {
-    if (!item.requiredRole) return true;
-    return item.requiredRole.includes(user.role);
+    return user.permissions?.includes(item.permission);
   });
 
   return (
