@@ -18,9 +18,9 @@ import type { User } from "@/lib/types";
 
 
 const navItems = [
+  { href: "/customers", icon: Users, label: "Customers", requiredRole: ["admin", "sales"] },
   { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard", requiredRole: ["admin", "sales", "Pending"] },
   { href: "/dealers", icon: Building, label: "Dealers", requiredRole: ["admin"] },
-  { href: "/customers", icon: Users, label: "Customers", requiredRole: ["admin", "sales"] },
   { href: "/inventory", icon: Boxes, label: "Inventory", requiredRole: ["admin", "sales"] },
   { href: "/admin", icon: ShieldCheck, label: "Admin", requiredRole: ["admin"] },
 ];
