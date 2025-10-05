@@ -24,7 +24,7 @@ export function CustomerList({ customers, sales }: CustomerListProps) {
     if (customers.length === 0) {
         return (
              <div className="border rounded-lg h-96 flex items-center justify-center">
-                <p className="text-muted-foreground">No customers found. Log a sale to add a new customer.</p>
+                <p className="text-muted-foreground">No customers match your search.</p>
             </div>
         )
     }
