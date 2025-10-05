@@ -13,6 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { formatCurrency } from "@/lib/utils";
 import { formatInTimeZone } from "date-fns-tz";
 import { DeleteSaleDialog } from "./delete-sale-dialog";
+import { EditSaleForm } from "./edit-sale-form";
 
 type SalesListProps = {
   sales: Sale[];
@@ -57,7 +58,7 @@ export function SalesList({ sales, customers, inventoryItems }: SalesListProps) 
             <TableHead>Date</TableHead>
             <TableHead className="text-right">Total</TableHead>
             <TableHead className="text-center">Status</TableHead>
-            <TableHead className="w-[180px]"></TableHead>
+            <TableHead className="w-[240px]"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -79,6 +80,7 @@ export function SalesList({ sales, customers, inventoryItems }: SalesListProps) 
                   <Button asChild variant="outline" size="sm">
                     <Link href={`/sales/${sale.id}`}>View Details</Link>
                   </Button>
+                  <EditSaleForm sale={sale} inventoryItems={inventoryItems} customers={customers} sales={sales} />
                   <DeleteSaleDialog saleId={sale.id} />
                 </TableCell>
               </TableRow>

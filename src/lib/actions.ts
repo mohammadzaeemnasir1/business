@@ -166,6 +166,85 @@ export async function addSale(data: {
     return newSale;
 }
 
+export async function updateSale(data: {
+    id: string;
+    customerName: string;
+    customerContact?: string;
+    saleType: 'cash' | 'credit';
+    items: { inventoryItemId: string; quantity: number; salePrice: number }[];
+    amountPaid: number;
+    paymentMethod: 'cash' | 'card' | 'mobile_payment';
+    paidTo: 'Faisal Rehman' | 'Hafiz Abdul Rasheed';
+}) {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    const sales = getSales();
+    const originalSale = sales.find(s => s.id === data.id);
+
+    if (!originalSale) {
+        throw new Error("Sale not found");
+    }
+
+    // Adjust inventory: restock old items, deduct new items
+    // 1. Restock items from the original sale
+    for (const item of originalSale.items) {
+        const inventoryItem = getInventoryItemById(item.inventoryItemId);
+        if (inventoryItem) {
+            inventoryItem.quantity += item.quantity;
+            updateInventoryItem(inventoryItem);
+        }
+    }
+
+    // 2. Deduct items from the updated sale
+    for (const item of data.items) {
+        const inventoryItem = getInventoryItemById(item.inventoryItemId);
+        if (inventoryItem) {
+            inventoryItem.quantity -= item.quantity;
+            updateInventoryItem(inventoryItem);
+        }
+    }
+
+    // Handle customer update/creation
+    let customer = getCustomerByName(data.customerName);
+    if (!customer) {
+        const customers = getCustomers();
+        const newId = (customers.length > 0 ? Math.max(...customers.map(c => parseInt(c.id))) : 0) + 1;
+        customer = {
+            id: newId.toString(),
+            name: data.customerName,
+            contact: data.customerContact,
+            avatarUrl: `https://picsum.photos/seed/cust${newId}/40/40`,
+        };
+        saveCustomer(customer);
+    } else {
+        if (data.customerContact && customer.contact !== data.customerContact) {
+            customer.contact = data.customerContact;
+            saveCustomer(customer);
+        }
+    }
+
+    // Update the sale object
+    const updatedSale: Sale = {
+        ...originalSale,
+        customerId: customer.id,
+        saleType: data.saleType,
+        items: data.items,
+        amountPaid: data.amountPaid,
+        paymentMethod: data.paymentMethod,
+        paidTo: data.paidTo,
+    };
+
+    saveSale(updatedSale);
+
+    revalidatePath("/customers");
+    revalidatePath("/inventory");
+    revalidatePath("/dashboard");
+    revalidatePath(`/sales/${data.id}`);
+
+    return updatedSale;
+}
+
+
 export async function deleteSale(saleId: string) {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     deleteSaleById(saleId);
