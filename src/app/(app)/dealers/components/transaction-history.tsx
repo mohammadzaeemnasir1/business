@@ -74,11 +74,7 @@ export function TransactionHistory({ data }: { data: Transaction[] }) {
     };
   });
 
-  const payersList = React.useMemo(() => {
-    const payers = new Set<string>();
-    data.forEach(t => t.payers.split(', ').filter(Boolean).forEach(p => payers.add(p)));
-    return Array.from(payers);
-  }, [data]);
+  const payersList = ["Faisal Rehman", "Hafiz Abdul Rasheed"];
 
 
   const columns: ColumnDef<Transaction>[] = [

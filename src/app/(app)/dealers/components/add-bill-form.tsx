@@ -22,6 +22,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -63,7 +70,7 @@ export function AddBillForm({ dealerId, totalLeftBehind }: AddBillFormProps) {
       billNumber: "",
       items: [{ name: "", pricePerPiece: 0, quantity: 1 }],
       paidAmount: 0,
-      payer: "",
+      payer: "Faisal Rehman",
     },
   });
 
@@ -85,7 +92,7 @@ export function AddBillForm({ dealerId, totalLeftBehind }: AddBillFormProps) {
 
   async function onSubmit(values: z.infer<typeof billFormSchema>) {
     if (values.paidAmount > 0 && !values.payer) {
-        form.setError("payer", { type: "manual", message: "Please enter who paid."});
+        form.setError("payer", { type: "manual", message: "Please select who paid."});
         return;
     }
 
@@ -264,14 +271,17 @@ export function AddBillForm({ dealerId, totalLeftBehind }: AddBillFormProps) {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Paid By</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Enter payer's name"
-                          {...field}
-                          value={field.value || ''}
-                          disabled={watchedPaidAmount <= 0}
-                        />
-                      </FormControl>
+                        <Select onValueChange={field.onChange} defaultValue={field.value || ""} disabled={watchedPaidAmount <= 0}>
+                            <FormControl>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select who paid" />
+                            </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                                <SelectItem value="Faisal Rehman">Faisal Rehman</SelectItem>
+                                <SelectItem value="Hafiz Abdul Rasheed">Hafiz Abdul Rasheed</SelectItem>
+                            </SelectContent>
+                        </Select>
                       <FormMessage />
                     </FormItem>
                   )}
