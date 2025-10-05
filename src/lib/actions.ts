@@ -247,7 +247,7 @@ export async function signIn(data: {email: string, password?: string}) {
     saveSession({ userId: user.id });
 
     revalidatePath("/", "layout");
-    redirect('/dashboard');
+    redirect('/customers');
 }
 
 export async function signOut() {
