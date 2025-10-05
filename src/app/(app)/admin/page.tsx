@@ -14,6 +14,8 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { EditStaffForm } from "./components/edit-staff-form";
 import { DeleteUserDialog } from "./components/delete-user-dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ExportData } from "@/components/export-data";
 
 export default async function AdminPage() {
   const user = await auth();
@@ -22,6 +24,13 @@ export default async function AdminPage() {
   }
 
   const users = getUsers();
+  const exportData = users.map(u => ({
+    ID: u.id,
+    Name: u.name,
+    Username: u.email,
+    Permissions: u.permissions.join(", "),
+  }));
+
 
   return (
     <div className="space-y-8">
@@ -32,52 +41,63 @@ export default async function AdminPage() {
         />
         <CreateStaffForm />
       </div>
-
-      <div className="space-y-4">
-        <h2 className="font-headline text-2xl font-semibold">Current Users</h2>
-        <div className="border rounded-lg">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Username</TableHead>
-                <TableHead>Permissions</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {users.map((user) => (
-                <TableRow key={user.id}>
-                  <TableCell className="font-medium">{user.name}</TableCell>
-                  <TableCell className="text-muted-foreground">
-                    {user.email}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex flex-wrap gap-1">
-                    {user.permissions.map(permission => (
-                         <Badge
-                          key={permission}
-                          variant={
-                            permission === "admin"
-                              ? "default"
-                              : "secondary"
-                          }
-                        >
-                          {permission}
-                        </Badge>
-                    ))}
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-right flex justify-end gap-2">
-                      <EditStaffForm user={user} />
-                      {!user.permissions.includes('admin') && <DeleteUserDialog userId={user.id} />}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      </div>
+      <Tabs defaultValue="users">
+        <TabsList>
+          <TabsTrigger value="users">Current Users</TabsTrigger>
+          <TabsTrigger value="backup">Backup</TabsTrigger>
+        </TabsList>
+        <TabsContent value="users">
+          <div className="space-y-4">
+            <div className="border rounded-lg">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Username</TableHead>
+                    <TableHead>Permissions</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {users.map((user) => (
+                    <TableRow key={user.id}>
+                      <TableCell className="font-medium">{user.name}</TableCell>
+                      <TableCell className="text-muted-foreground">
+                        {user.email}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex flex-wrap gap-1">
+                        {user.permissions.map(permission => (
+                            <Badge
+                              key={permission}
+                              variant={
+                                permission === "admin"
+                                  ? "default"
+                                  : "secondary"
+                              }
+                            >
+                              {permission}
+                            </Badge>
+                        ))}
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-right flex justify-end gap-2">
+                          <EditStaffForm user={user} />
+                          {!user.permissions.includes('admin') && <DeleteUserDialog userId={user.id} />}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </div>
+        </TabsContent>
+        <TabsContent value="backup">
+            <div className="mt-4">
+                <ExportData data={exportData} fileName="admin_users_backup" />
+            </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

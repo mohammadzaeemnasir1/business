@@ -9,6 +9,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatCurrency } from "@/lib/utils";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ExportData } from "@/components/export-data";
 
 export default function InventoryPage() {
   const inventoryItems = getAllInventoryItems();
@@ -25,44 +27,64 @@ export default function InventoryPage() {
 
   const displayItems = Object.values(aggregatedItems).sort((a,b) => a.brand.localeCompare(b.brand));
 
+  const exportData = displayItems.map(item => ({
+    "Brand": item.brand,
+    "Description": item.description,
+    "Quantity": item.quantity,
+    "Cost per Unit": formatCurrency(item.costPerUnit),
+    "Total Value": formatCurrency(item.quantity * item.costPerUnit),
+  }));
+
   return (
     <div className="space-y-8">
       <PageHeader
         title="Inventory"
         description="A real-time view of all your stock."
       />
-
-      <div className="border rounded-lg">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Brand</TableHead>
-              <TableHead>Description</TableHead>
-              <TableHead className="text-center">Quantity</TableHead>
-              <TableHead className="text-right">Cost/Unit</TableHead>
-              <TableHead className="text-right">Total Value</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {displayItems.map((item, index) => (
-              <TableRow key={index}>
-                <TableCell className="font-medium">{item.brand}</TableCell>
-                <TableCell className="text-muted-foreground">{item.description}</TableCell>
-                <TableCell className="text-center font-semibold">{item.quantity}</TableCell>
-                <TableCell className="text-right">{formatCurrency(item.costPerUnit)}</TableCell>
-                <TableCell className="text-right font-bold">{formatCurrency(item.quantity * item.costPerUnit)}</TableCell>
-              </TableRow>
-            ))}
-             {displayItems.length === 0 && (
+      <Tabs defaultValue="inventory">
+        <TabsList>
+            <TabsTrigger value="inventory">Current Stock</TabsTrigger>
+            <TabsTrigger value="backup">Backup</TabsTrigger>
+        </TabsList>
+        <TabsContent value="inventory">
+          <div className="border rounded-lg mt-4">
+            <Table>
+              <TableHeader>
                 <TableRow>
-                    <TableCell colSpan={5} className="text-center text-muted-foreground h-24">
-                        No inventory items found.
-                    </TableCell>
+                  <TableHead>Brand</TableHead>
+                  <TableHead>Description</TableHead>
+                  <TableHead className="text-center">Quantity</TableHead>
+                  <TableHead className="text-right">Cost/Unit</TableHead>
+                  <TableHead className="text-right">Total Value</TableHead>
                 </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+              </TableHeader>
+              <TableBody>
+                {displayItems.map((item, index) => (
+                  <TableRow key={index}>
+                    <TableCell className="font-medium">{item.brand}</TableCell>
+                    <TableCell className="text-muted-foreground">{item.description}</TableCell>
+                    <TableCell className="text-center font-semibold">{item.quantity}</TableCell>
+                    <TableCell className="text-right">{formatCurrency(item.costPerUnit)}</TableCell>
+                    <TableCell className="text-right font-bold">{formatCurrency(item.quantity * item.costPerUnit)}</TableCell>
+                  </TableRow>
+                ))}
+                {displayItems.length === 0 && (
+                    <TableRow>
+                        <TableCell colSpan={5} className="text-center text-muted-foreground h-24">
+                            No inventory items found.
+                        </TableCell>
+                    </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </TabsContent>
+        <TabsContent value="backup">
+            <div className="mt-4">
+                <ExportData data={exportData} fileName="inventory_backup" />
+            </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
