@@ -5,10 +5,15 @@ import {
   getTotalInventoryValue,
   getAllPayments,
   getOutstandingBalanceForDealer,
+  getPersonalAccountSummary,
+  getMonthlySales,
 } from "@/lib/data";
 import { StatsCards } from "./components/stats-cards";
 import { FinancialOverview } from "./components/financial-overview";
 import { RecentPayments } from "./components/recent-payments";
+import { PersonalAccountSummary } from "./components/personal-account-summary";
+import { SalesSummary } from "./components/sales-summary";
+import { Separator } from "@/components/ui/separator";
 
 export default function DashboardPage() {
   const dealers = getDealers();
@@ -22,6 +27,10 @@ export default function DashboardPage() {
     outstandingBalance: getOutstandingBalanceForDealer(dealer.id),
   }));
 
+  const faisalSummary = getPersonalAccountSummary("Faisal Rehman");
+  const hafizSummary = getPersonalAccountSummary("Hafiz Abdul Rasheed");
+  const monthlySales = getMonthlySales();
+
   return (
     <div className="space-y-8">
       <PageHeader
@@ -34,6 +43,22 @@ export default function DashboardPage() {
         totalOutstanding={totalOutstanding}
         totalInventoryValue={totalInventoryValue}
       />
+      
+      <Separator />
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <PersonalAccountSummary 
+            person="Faisal Rehman"
+            summary={faisalSummary}
+          />
+           <PersonalAccountSummary 
+            person="Hafiz Abdul Rasheed"
+            summary={hafizSummary}
+          />
+          <SalesSummary monthlySales={monthlySales}/>
+      </div>
+
+      <Separator />
 
       <div className="grid gap-8 lg:grid-cols-5">
         <div className="lg:col-span-3">

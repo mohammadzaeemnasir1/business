@@ -1,6 +1,8 @@
 import type { Dealer, Bill, InventoryItem, Customer, Sale, User, Session } from './types';
 import fs from 'fs';
 import path from 'path';
+import { startOfMonth, subMonths, endOfMonth, isWithinInterval } from 'date-fns';
+
 
 const dealersPath = path.join(process.cwd(), 'src', 'lib', 'dealers.json');
 const billsPath = path.join(process.cwd(), 'src', 'lib', 'bills.json');
@@ -244,3 +246,51 @@ export const getAllPayments = () => {
         }));
     }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
+
+export const getPersonalAccountSummary = (person: 'Faisal Rehman' | 'Hafiz Abdul Rasheed') => {
+    const sales = getSales();
+    const bills = getBills();
+
+    const totalReceived = sales
+        .filter(sale => sale.paidTo === person)
+        .reduce((sum, sale) => sum + sale.amountPaid, 0);
+    
+    const totalPaidToDealers = bills
+        .flatMap(bill => bill.payments)
+        .filter(payment => payment.payer === person)
+        .reduce((sum, payment) => sum + payment.amount, 0);
+
+    const netAmount = totalReceived - totalPaidToDealers;
+
+    return {
+        totalReceived,
+        totalPaidToDealers,
+        netAmount,
+    };
+};
+
+export const getMonthlySales = () => {
+    const sales = getSales();
+    const now = new Date();
+
+    const currentMonthStart = startOfMonth(now);
+    const currentMonthEnd = endOfMonth(now);
+
+    const prevMonthStart = startOfMonth(subMonths(now, 1));
+    const prevMonthEnd = endOfMonth(subMonths(now, 1));
+
+    const totalSale = (sale: Sale) => sale.items.reduce((sum, item) => sum + (item.salePrice * item.quantity), 0);
+
+    const currentMonthSales = sales
+        .filter(sale => isWithinInterval(new Date(sale.date), { start: currentMonthStart, end: currentMonthEnd }))
+        .reduce((sum, sale) => sum + totalSale(sale), 0);
+    
+    const previousMonthSales = sales
+        .filter(sale => isWithinInterval(new Date(sale.date), { start: prevMonthStart, end: prevMonthEnd }))
+        .reduce((sum, sale) => sum + totalSale(sale), 0);
+    
+    return {
+        currentMonth: currentMonthSales,
+        previousMonth: previousMonthSales,
+    };
+};
