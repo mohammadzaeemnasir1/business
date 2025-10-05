@@ -174,7 +174,7 @@ export function BillDetails({ sale, customer, items, totalOutstanding, lastPurch
                           <span>{formatCurrency(subtotal)}</span>
                       </div>
                        <div className="flex justify-between">
-                          <span>Paid (This Bill):</span>
+                          <span>Amount Paid on This Bill:</span>
                           <span>{formatCurrency(sale.amountPaid)}</span>
                       </div>
                        <div className="flex justify-between font-semibold">
