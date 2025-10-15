@@ -332,11 +332,10 @@ export async function signIn(data: {email: string, password?: string}) {
     saveSession({ userId: user.id });
 
     revalidatePath("/", "layout");
-    redirect('/customers');
 }
 
 export async function signOut() {
     clearSession();
     revalidatePath("/", "layout");
-    redirect('/login');
+    redirect('/');
 }

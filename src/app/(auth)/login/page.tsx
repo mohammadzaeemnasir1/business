@@ -24,6 +24,7 @@ import { Button } from "@/components/ui/button";
 import { ShoppingBag, Loader2 } from "lucide-react";
 import { signIn } from "@/lib/actions";
 import { useToast } from "@/hooks/use-toast";
+import { redirect } from "next/navigation";
 
 const loginFormSchema = z.object({
   email: z.string().min(1, "Username is required."),
@@ -49,8 +50,12 @@ export default function LoginPage() {
         title: "Sign In Failed",
         description: error,
       });
+    } else {
+      // On success, the action redirects, but we can also trigger a client-side redirect
+      // to ensure a smooth transition without waiting for the server action's redirect.
+      // This is especially useful if the server action doesn't automatically redirect.
+      window.location.href = '/customers';
     }
-    // On success, the action redirects, so no other logic is needed here.
   }
 
   return (

@@ -14,14 +14,14 @@ export default async function AppLayout({
 }) {
   const session = await auth();
   if (!session) {
-    redirect("/login");
+    redirect("/");
   }
 
   // If user has no permissions, they are stuck on a blank page.
   // Redirect to login, maybe their permissions will be updated.
   // In a real app, you'd want a dedicated "pending approval" or error page.
   if (!session.permissions || session.permissions.length === 0) {
-    redirect('/login');
+    redirect('/');
   }
 
   return (
