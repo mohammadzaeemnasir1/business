@@ -1,3 +1,4 @@
+
 "use server";
 
 import { revalidatePath } from "next/cache";
@@ -330,8 +331,9 @@ export async function signIn(data: {email: string, password?: string}) {
     }
 
     saveSession({ userId: user.id });
-
+    
     revalidatePath("/", "layout");
+    redirect('/customers');
 }
 
 export async function signOut() {
