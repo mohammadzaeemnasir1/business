@@ -88,5 +88,44 @@
     "amountPaid": 30000,
     "paymentMethod": "cash",
     "paidTo": "Faisal Rehman"
+  },
+  {
+    "id": "s6",
+    "billNo": "B-006",
+    "customerId": "71",
+    "date": "2025-10-11",
+    "saleType": "cash",
+    "items": [
+      {
+        "inventoryItemId": "i1",
+        "quantity": 10,
+        "salePrice": 2300
+      }
+    ],
+    "amountPaid": 23000,
+    "paymentMethod": "cash",
+    "paidTo": "Faisal Rehman"
+  },
+  {
+    "id": "s7",
+    "billNo": "B-007",
+    "customerId": "1",
+    "date": "2025-10-12",
+    "saleType": "cash",
+    "items": [
+      {
+        "inventoryItemId": "i2",
+        "quantity": 11,
+        "salePrice": 2500
+      },
+      {
+        "inventoryItemId": "i3",
+        "quantity": 11,
+        "salePrice": 2400
+      }
+    ],
+    "amountPaid": 50000,
+    "paymentMethod": "cash",
+    "paidTo": "Faisal Rehman"
   }
 ]

@@ -18,14 +18,14 @@
         "id": "i1",
         "brand": "Sana Safinaz Lawn",
         "description": "Lawn Collection 2024 (Vol. 1)",
-        "quantity": 500,
+        "quantity": 490,
         "costPerUnit": 50000
       },
       {
         "id": "i2",
         "brand": "Sana Safinaz Pret",
         "description": "Luxury Pret",
-        "quantity": 234,
+        "quantity": 223,
         "costPerUnit": 100000
       }
     ]
@@ -49,7 +49,7 @@
         "id": "i3",
         "brand": "Sapphire Lawn",
         "description": "2-Piece Stitched",
-        "quantity": 790,
+        "quantity": 779,
         "costPerUnit": 50000
       }
     ]
@@ -75,6 +75,37 @@
         "description": "Festive Collection",
         "quantity": 1000,
         "costPerUnit": 30000
+      }
+    ]
+  },
+  {
+    "id": "b4",
+    "dealerId": "21",
+    "billNumber": "12",
+    "date": "2025-10-01",
+    "totalAmount": 470000,
+    "payments": [
+      {
+        "id": "p4",
+        "amount": 400000,
+        "date": "2025-10-01",
+        "payer": "Faisal Rehman"
+      }
+    ],
+    "items": [
+      {
+        "id": "i5",
+        "brand": "Suit",
+        "description": "Suit",
+        "quantity": 100,
+        "costPerUnit": 2300
+      },
+      {
+        "id": "i6",
+        "brand": "Kapra",
+        "description": "Kapra",
+        "quantity": 100,
+        "costPerUnit": 2400
       }
     ]
   }

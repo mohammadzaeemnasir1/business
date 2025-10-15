@@ -30,9 +30,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  experimental: {
-    serverComponentsExternalPackages: ['qrcode.react'],
-  },
+  serverExternalPackages: ['qrcode.react'],
 };
 
 export default nextConfig;
