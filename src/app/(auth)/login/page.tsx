@@ -60,7 +60,7 @@ export default function LoginPage() {
           <ShoppingBag className="w-12 h-12 text-primary" />
         </div>
         <CardTitle className="font-headline text-3xl">
-          Business AI
+          Fancy Pearls
         </CardTitle>
         <CardDescription>
           (By Zaeem Nasir)

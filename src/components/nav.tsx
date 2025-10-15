@@ -38,8 +38,8 @@ export function Nav({ user }: { user: User }) {
         <Link href="/dashboard" className="flex items-center gap-2">
             <ShoppingBag className="w-8 h-8 text-primary" />
             <div className="flex flex-col">
-              <h2 className="font-headline text-lg font-semibold text-primary-foreground tracking-tight">
-                  Business AI
+              <h2 className="font-headline text-lg font-semibold text-sidebar-foreground tracking-tight">
+                  Fancy Pearls
               </h2>
               <p className="text-xs text-sidebar-foreground/80">(By Zaeem Nasir)</p>
             </div>

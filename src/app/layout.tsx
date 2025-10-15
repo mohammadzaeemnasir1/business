@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster"
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Business AI (By Zaeem Nasir)",
+  title: "Fancy Pearls (By Zaeem Nasir)",
   description: "Business Management Suite",
 };
 

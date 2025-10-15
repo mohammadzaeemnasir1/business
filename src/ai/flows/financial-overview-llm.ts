@@ -49,7 +49,7 @@ const financialOverviewPrompt = ai.definePrompt({
   name: 'financialOverviewPrompt',
   input: {schema: FinancialOverviewInputSchema},
   output: {schema: FinancialOverviewOutputSchema},
-  prompt: `You are a financial analyst providing insights into the financial health of Business AI, a cloth shop.
+  prompt: `You are a financial analyst providing insights into the financial health of Fancy Pearls, a cloth shop.
 
   Dealers and Outstanding Balances:
   {{#each dealers}}
@@ -58,7 +58,7 @@ const financialOverviewPrompt = ai.definePrompt({
 
   Current Market Conditions: {{marketConditions}}
 
-  Based on the outstanding balances for each dealer and the current market conditions, estimate the actual outstanding amount owed to each dealer, taking into account factors like potential delays in payments due to a recession or other global events. Provide reasoning for each dealer's estimated outstanding balance and a summary of Business AI's overall financial health.
+  Based on the outstanding balances for each dealer and the current market conditions, estimate the actual outstanding amount owed to each dealer, taking into account factors like potential delays in payments due to a recession or other global events. Provide reasoning for each dealer's estimated outstanding balance and a summary of Fancy Pearls's overall financial health.
 
   Output the estimated debt for each dealer, including dealer name, estimated outstanding balance, and the reasoning behind the estimation.  Also provide a summary of the overall financial health of the shop.
   `,
