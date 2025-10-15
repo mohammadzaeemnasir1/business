@@ -1,22 +1,40 @@
 "use client";
 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Users, DollarSign, Boxes } from "lucide-react";
+import { Users, DollarSign, Boxes, TrendingUp } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
 
 type StatsCardsProps = {
   totalDealers: number;
   totalOutstanding: number;
   totalInventoryValue: number;
+  totalProfit: number;
 };
 
 export function StatsCards({
   totalDealers,
   totalOutstanding,
   totalInventoryValue,
+  totalProfit,
 }: StatsCardsProps) {
   return (
-    <div className="grid gap-4 md:grid-cols-3">
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+       <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">
+            Total Profit
+          </CardTitle>
+          <TrendingUp className="h-4 w-4 text-green-500" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold text-green-600">
+            {formatCurrency(totalProfit)}
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Revenue minus cost of goods sold
+          </p>
+        </CardContent>
+      </Card>
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">

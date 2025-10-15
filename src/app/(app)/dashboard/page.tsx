@@ -13,7 +13,8 @@ import {
   getAllInventoryItems,
   getUsers,
   getOutstandingBalanceForBill,
-  getPaidAmountForBill
+  getPaidAmountForBill,
+  getTotalProfit,
 } from "@/lib/data";
 import { StatsCards } from "./components/stats-cards";
 import { FinancialOverview } from "./components/financial-overview";
@@ -32,6 +33,7 @@ export default function DashboardPage() {
   const totalDealers = dealers.length;
   const totalOutstanding = getTotalOutstandingDebt();
   const totalInventoryValue = getTotalInventoryValue();
+  const totalProfit = getTotalProfit();
   const payments = getAllPayments().slice(0, 5); // Show 5 most recent payments
 
   const dealerDataForAI = dealers.map((dealer) => ({
@@ -177,6 +179,7 @@ export default function DashboardPage() {
               totalDealers={totalDealers}
               totalOutstanding={totalOutstanding}
               totalInventoryValue={totalInventoryValue}
+              totalProfit={totalProfit}
             />
             
             <Separator />

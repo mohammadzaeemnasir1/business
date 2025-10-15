@@ -294,3 +294,25 @@ export const getMonthlySales = () => {
         previousMonth: previousMonthSales,
     };
 };
+
+export const getTotalProfit = () => {
+    const sales = getSales();
+    const allInventoryItems = getAllInventoryItems();
+
+    let totalRevenue = 0;
+    let totalCost = 0;
+
+    for (const sale of sales) {
+        for (const saleItem of sale.items) {
+            totalRevenue += saleItem.salePrice * saleItem.quantity;
+            
+            const inventoryItem = allInventoryItems.find(inv => inv.id === saleItem.inventoryItemId);
+            
+            if (inventoryItem) {
+                totalCost += inventoryItem.costPerUnit * saleItem.quantity;
+            }
+        }
+    }
+    
+    return totalRevenue - totalCost;
+};
