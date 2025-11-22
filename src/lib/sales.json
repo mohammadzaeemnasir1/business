@@ -56,23 +56,6 @@
     "paidTo": "Faisal Rehman"
   },
   {
-    "id": "s4",
-    "billNo": "B-004",
-    "customerId": "1",
-    "date": "2025-10-05",
-    "saleType": "cash",
-    "items": [
-      {
-        "inventoryItemId": "i3",
-        "quantity": 10,
-        "salePrice": 3200
-      }
-    ],
-    "amountPaid": 50000,
-    "paymentMethod": "cash",
-    "paidTo": "Faisal Rehman"
-  },
-  {
     "id": "s5",
     "billNo": "B-005",
     "customerId": "1",
